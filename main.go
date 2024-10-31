@@ -17,7 +17,7 @@ import (
 // Make new Folder in dataload project called models - models.go (package models at top) - all structs go in here
 
 func main() {
-	var card models.Card
+	var card models.FileCard
 	file, err := os.Open("all-cards-20241022215316.json")
 	if err != nil {
 		log.Fatal(err)
@@ -42,10 +42,13 @@ func main() {
 
 			err = json.Unmarshal([]byte(line), &card)
 			if err != nil {
-				log.Println(line)
+				log.Println(card.Name)
 				log.Fatal(err)
 			}
-			log.Println(card.Name)
+			if card.Name == "Hostage Taker" {
+				log.Print(card.PrintedText)
+			}
+
 		}
 
 	}
