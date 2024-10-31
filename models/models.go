@@ -145,6 +145,8 @@ type FileCard struct {
 	PrintedName     string       `json:"printed_name"`
 	PrintedText     string       `json:"printed_text"`
 	PrintedTypeLine string       `json:"printed_type_line"`
+	FlavorText      string       `json:"flavor_text"`
+	//CardFaces       []string     `json:"card_faces"`
 }
 
 type Cards struct {
@@ -165,7 +167,7 @@ type Cards struct {
 	Reserved      bool       `json:"reserved"`
 	RulingsUri    string     `json:"rulings_uri"`
 	Legalities    Legalities `json:"legalities"`
-	// Maybe add in []cardfaces
+	CardFaces     []string   `json:"card_faces"`
 }
 
 type Prints struct {
@@ -211,4 +213,5 @@ type PrintLangs struct {
 	PrintedName     string   `json:"printed_name"`
 	PrintedText     string   `json:"printed_text"`
 	PrintedTypeLine string   `json:"printed_type_line"`
+	//FlavorText      string   `json:"flavor_text"`
 }

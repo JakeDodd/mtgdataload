@@ -45,8 +45,8 @@ func main() {
 				log.Println(card.Name)
 				log.Fatal(err)
 			}
-			if card.Name == "Hostage Taker" {
-				log.Print(card.PrintedText)
+			if card.Name == "Needleverge Pathway // Pillarverge Pathway" && card.SetName == "Zendikar Rising" {
+				log.Print(card.FlavorText)
 			}
 
 		}
