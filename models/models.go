@@ -213,5 +213,5 @@ type PrintLangs struct {
 	PrintedName     string   `json:"printed_name"`
 	PrintedText     string   `json:"printed_text"`
 	PrintedTypeLine string   `json:"printed_type_line"`
-	//FlavorText      string   `json:"flavor_text"`
+	FlavorText      string   `json:"flavor_text"`
 }
