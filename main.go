@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"encoding/json"
 	"log"
-	"math"
 	"os"
 	"time"
 
@@ -46,8 +45,8 @@ func main() {
 				log.Println(card.Name)
 				log.Fatal(err)
 			}
-			if card.Cmc != (math.Trunc(card.Cmc)) {
-				log.Print(card.Name, card.Cmc)
+			if card.Name == "Balloon Stand" {
+				log.Print(card.AttractionLights)
 			}
 
 		}

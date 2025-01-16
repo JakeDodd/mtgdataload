@@ -142,6 +142,7 @@ type FileCard struct {
 	Promo             bool         `json:"promo"`
 	Reprint           bool         `json:"reprint"`
 	Variation         bool         `json:"variation"`
+	VariationOf       string       `json:"variation_of"`
 	SetId             string       `json:"set_id"`
 	Set               string       `json:"set"`
 	SetName           string       `json:"set_name"`
@@ -179,6 +180,18 @@ type FileCard struct {
 	ColorIndicator    []string     `json:"color_indicator"`
 	Defense           string       `json:"defense"`
 	Loyalty           string       `json:"loyalty"`
+	EdhrecRank        int          `json:"edhrec_rank"`
+	HandModifier      string       `json:"hand_modifier"`
+	LifeModifier      string       `json:"life_modifier"`
+	PennyRank         int          `json:"penny_rank"`
+	AttractionLights  []int        `json:"attraction_lights"`
+	ContentWarning    bool         `json:"content_warning"`
+	FlavorName        string       `json:"flavor_name"`
+	FrameEffects      []string     `json:"frame_effects"`
+	SecurityStamp     string       `json:"security_stamp"`
+	Previewed_at      string       `json:"preview.previewed_at"`
+	PreviewUri        string       `json:"preview.source_uri"`
+	PreviewSource     string       `json:"preview.source"`
 }
 
 type Cards struct {
@@ -202,6 +215,11 @@ type Cards struct {
 	ColorIndicator []string   `json:"color_indicator"`
 	Defense        string     `json:"defense"`
 	Loyalty        string     `json:"loyalty"`
+	EdhrecRank     int        `json:"edhrec_rank"`
+	HandModifier   string     `json:"hand_modifier"`
+	LifeModifier   string     `json:"life_modifier"`
+	PennyRank      int        `json:"penny_rank"`
+	ContentWarning bool       `json:"content_warning"`
 }
 
 type Prints struct {
@@ -233,6 +251,14 @@ type Prints struct {
 	CardName          string      `json:"name"`
 	PrintsSearchUri   string      `json:"prints_search_uri"`
 	AllParts          []string    `json:"all_parts"`
+	ArtistIds         []string    `json:"artist_ids"`
+	AttractionLights  []int       `json:"attraction_lights"`
+	FlavorName        string      `json:"flavor_name"`
+	FrameEffects      []string    `json:"frame_effects"`
+	SecurityStamp     string      `json:"security_stamp"`
+	Previewed_at      string      `json:"preview.previewed_at"`
+	PreviewUri        string      `json:"preview.source_uri"`
+	PreviewSource     string      `json:"preview.source"`
 }
 
 type PrintLangs struct {
@@ -244,8 +270,10 @@ type PrintLangs struct {
 	NotFoil         bool     `json:"nonfoil"`
 	Finishes        []string `json:"finishes"`
 	Promo           bool     `json:"promo"`
+	PromoTypes      []string `json:"promo_types"`
 	Reprint         bool     `json:"reprint"`
 	Variation       bool     `json:"variation"`
+	VariationOf     string   `json:"variation_of"`
 	Price           Prices   `json:"prices"`
 	PrintId         int      `json:"print_id"`
 	PrintedName     string   `json:"printed_name"`
