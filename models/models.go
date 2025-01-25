@@ -131,6 +131,7 @@ type FileCard struct {
 	Colors            []string     `json:"colors"`
 	ColorIdentity     []string     `json:"color_identity"`
 	Keywords          []string     `json:"keywords"`
+	ProducedMana      []string     `json:"produced_mana"`
 	AllParts          []AllParts   `json:"all_parts"`
 	Legalities        Legalities   `json:"legalities"`
 	Games             []string     `json:"games"`
