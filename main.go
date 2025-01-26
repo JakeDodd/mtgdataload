@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/JakeDodd/mtgdataload/models"
@@ -32,6 +33,38 @@ func array2String(arr []string) string {
 	var result string
 	for i := 0; i < len(arr); i++ {
 		result += arr[i]
+		if i < len(arr)-1 {
+			result += ","
+		}
+	}
+	return result
+}
+
+func intArray2String(arr []int) string {
+	var result string
+	for i := 0; i < len(arr); i++ {
+		result += strconv.Itoa(arr[i])
+		if i < len(arr)-1 {
+			result += ","
+		}
+	}
+	return result
+}
+
+func createCardFacesString(arr []models.CardFaces) string {
+	//{row(a, b, c), row(a, b, c), ...}
+	var result string
+	for i := 0; i < len(arr); i++ {
+		cf := arr[i]
+		colorIndicator := array2String(cf.ColorIndicator)
+		colors := array2String(cf.Colors)
+		cmc := strconv.FormatFloat(cf.Cmc, 'f', -1, 64)
+		row := "row('" + cf.Artist + "','" + cf.ArtistId + "'," + cmc + ",'{" + colorIndicator + "}','{" + colors + "}'," +
+			cf.Defense + "','" + cf.FlavorText + "','" + cf.IllustrationId + ", row('" + cf.ImageUris.Png + "','" + cf.ImageUris.BorderCrop + "','" +
+			cf.ImageUris.ArtCrop + "','" + cf.ImageUris.Large + "','" + cf.ImageUris.Normal + "','" + cf.ImageUris.Small + "')::image_uris,'" +
+			cf.Layout + "','" + cf.Loyalty + "','" + cf.ManaCost + "','" + cf.Name + "','" + cf.Object + "','" + cf.OracleId + "','" + cf.OracleText + "','" +
+			cf.Power + "','" + cf.PrintedName + "','" + cf.PrintedText + "','" + cf.PrintedTypeLine + "','" + cf.Toughness + "','" + cf.TypeLine + "','" + cf.Watermark + "')::card_faces"
+		result += row
 		if i < len(arr)-1 {
 			result += ","
 		}
@@ -121,18 +154,21 @@ func main() {
 			keywordsSql := fmt.Sprintf("INSERT into cards (\"object\", oracle_id, card_name, scryfall_uri, layout, mana_cost, cmc, type_line, oracle_text, power,"+
 				" toughness, colors, color_identity, keywords, produced_mana, reserved, rulings_uri, legalities, defense, loyalty, color_indicator, card_faces, edhrec_rank, "+
 				"hand_modifier, life_modifier, attraction_lights, content_warning) "+
-				"VALUES ('%s','%s','%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s', '{%s}', '{%s}', '{%s}','{%s}', %s, '%s', row('%s', '%s', '%s', '%s', '%s', '%s', '%s', "+
-				"'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'), '%s', '%s', '{%s}', row('%s','%s',%d, '{%s}', '{%s}', '%s', '%s','%s', "+
-				"row('%s','%s','%s','%s','%s','%s'), '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'), %d, '%s','%s', '{%s}', %s)",
-				card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, card.Cmc, card.TypeLine, card.OracleText, card.Power,
+				"VALUES ('%s','%s','%s', '%s', '%s', '%s', %s, '%s', '%s', '%s', '%s', '{%s}', '{%s}', '{%s}','{%s}', %s, '%s', row('%s', '%s', '%s', '%s', '%s', '%s', "+
+				"'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')::legality, '%s', '%s', '{%s}', '{%s}', %d, '%s','%s', '{%s}', %s)",
+				card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, strconv.FormatFloat(card.Cmc, 'f', -1, 64), card.TypeLine, card.OracleText, card.Power,
 				card.Toughness, colors, colorIdentity, keywords, producedMana, ternary(card.Reserved, "true", "false"), card.RulingsUri,
 				card.Legalities.Standard, card.Legalities.Future, card.Legalities.Historic, card.Legalities.Timeless, card.Legalities.Gladiator, card.Legalities.Pioneer,
-				card.Legalities.Pioneer, card.Legalities.Explorer, card.Legalities.Modern, card.Legalities.Legacy,
+				card.Legalities.Explorer, card.Legalities.Modern, card.Legalities.Legacy,
 				card.Legalities.Pauper, card.Legalities.Vintage, card.Legalities.Penny, card.Legalities.Commander, card.Legalities.Oathbreaker,
 				card.Legalities.StandardBrawl, card.Legalities.Brawl, card.Legalities.Alchemy, card.Legalities.PauperCommander, card.Legalities.Duel,
-				card.Legalities.Oldschool, card.Legalities.Premodern, card.Legalities.Predh, card.Defense, card.Loyalty, colorIndicator, card.CardFaces.Artist,
-				ternary(card.ContentWarning, "true", "false"))
-			db.Query(keywordsSql)
+				card.Legalities.Oldschool, card.Legalities.Premodern, card.Legalities.Predh, card.Defense, card.Loyalty, colorIndicator, createCardFacesString(card.CardFaces),
+				card.EdhrecRank, card.HandModifier, card.LifeModifier, intArray2String(card.AttractionLights), ternary(card.ContentWarning, "true", "false"))
+			_, err := db.Query(keywordsSql)
+			if err != nil {
+				log.Print(keywordsSql)
+				log.Fatal(err)
+			}
 		}
 
 	}
