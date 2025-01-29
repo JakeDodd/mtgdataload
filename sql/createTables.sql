@@ -1,15 +1,7 @@
---{"object":"card","id":"0000419b-0bba-4488-8f7a-6194544ce91e","oracle_id":"b34bb2dc-c1af-4d77-b0b3-a0fb342a5fc6","multiverse_ids":[668564],"mtgo_id":129825,"arena_id":91829,"tcgplayer_id":558404,"name":"Forest","lang":"en","released_at":"2024-08-02","uri":"https://api.scryfall.com/cards/0000419b-0bba-4488-8f7a-6194544ce91e","scryfall_uri":"https://scryfall.com/card/blb/280/forest?utm_source=api","layout":"normal","highres_image":true,"image_status":"highres_scan","image_uris":{"small":"https://cards.scryfall.io/small/front/0/0/0000419b-0bba-4488-8f7a-6194544ce91e.jpg?1721427487","normal":"https://cards.scryfall.io/normal/front/0/0/0000419b-0bba-4488-8f7a-6194544ce91e.jpg?1721427487","large":"https://cards.scryfall.io/large/front/0/0/0000419b-0bba-4488-8f7a-6194544ce91e.jpg?1721427487","png":"https://cards.scryfall.io/png/front/0/0/0000419b-0bba-4488-8f7a-6194544ce91e.png?1721427487","art_crop":"https://cards.scryfall.io/art_crop/front/0/0/0000419b-0bba-4488-8f7a-6194544ce91e.jpg?1721427487","border_crop":"https://cards.scryfall.io/border_crop/front/0/0/0000419b-0bba-4488-8f7a-6194544ce91e.jpg?1721427487"},"mana_cost":"","cmc":0.0,"type_line":"Basic Land — Forest","oracle_text":"({T}: Add {G}.)","colors":[],"color_identity":["G"],"keywords":[],"produced_mana":["G"],"legalities":{"standard":"legal","future":"legal","historic":"legal","timeless":"legal","gladiator":"legal","pioneer":"legal","explorer":"legal","modern":"legal","legacy":"legal","pauper":"legal","vintage":"legal","penny":"legal","commander":"legal","oathbreaker":"legal","standardbrawl":"legal","brawl":"legal","alchemy":"legal","paupercommander":"legal","duel":"legal","oldschool":"not_legal","premodern":"legal","predh":"legal"},"games":["paper","mtgo","arena"],"reserved":false,"foil":true,"nonfoil":true,"finishes":["nonfoil","foil"],"oversized":false,"promo":false,"reprint":true,"variation":false,"set_id":"a2f58272-bba6-439d-871e-7a46686ac018","set":"blb","set_name":"Bloomburrow","set_type":"expansion","set_uri":"https://api.scryfall.com/sets/a2f58272-bba6-439d-871e-7a46686ac018","set_search_uri":"https://api.scryfall.com/cards/search?order=set&q=e%3Ablb&unique=prints","scryfall_set_uri":"https://scryfall.com/sets/blb?utm_source=api","rulings_uri":"https://api.scryfall.com/cards/0000419b-0bba-4488-8f7a-6194544ce91e/rulings","prints_search_uri":"https://api.scryfall.com/cards/search?order=released&q=oracleid%3Ab34bb2dc-c1af-4d77-b0b3-a0fb342a5fc6&unique=prints","collector_number":"280","digital":false,"rarity":"common","card_back_id":"0aeebaf5-8c7d-4636-9e82-8c27447861f7","artist":"David Robert Hovey","artist_ids":["22ab27e3-6476-48f1-a9f7-9a9e86339030"],"illustration_id":"fb2b1ca2-7440-48c2-81c8-84da0a45a626","border_color":"black","frame":"2015","full_art":true,"textless":false,"booster":true,"story_spotlight":false,"prices":{"usd":"0.20","usd_foil":"0.36","usd_etched":null,"eur":null,"eur_foil":null,"tix":"0.02"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=668564&printed=false","tcgplayer_infinite_articles":"https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&trafcat=infinite&u=https%3A%2F%2Finfinite.tcgplayer.com%2Fsearch%3FcontentMode%3Darticle%26game%3Dmagic%26partner%3Dscryfall%26q%3DForest","tcgplayer_infinite_decks":"https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&trafcat=infinite&u=https%3A%2F%2Finfinite.tcgplayer.com%2Fsearch%3FcontentMode%3Ddeck%26game%3Dmagic%26partner%3Dscryfall%26q%3DForest","edhrec":"https://edhrec.com/route/?cc=Forest"},"purchase_uris":{"tcgplayer":"https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&u=https%3A%2F%2Fwww.tcgplayer.com%2Fproduct%2F558404%3Fpage%3D1","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=Forest&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/129825?affiliate_id=scryfall&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"}},
 DROP TABLE IF EXISTS print_lang, prints, card_keywords, cards, mtg_set, keywords;
-DROP TYPE IF EXISTS related_uris, prices, legality, image_uris;
+DROP TYPE IF EXISTS card_faces, related_uris, prices, legality, image_uris, all_parts;
 
-CREATE TYPE image_uris as(
-    png text,
-    border_crop text,
-    art_crop text,
-    large text,
-    normal text,
-    small text
-);
+
 
 Create TYPE all_parts as(
     object_parts text,
@@ -19,7 +11,7 @@ Create TYPE all_parts as(
     type_line text,
     uri text
 
-)
+);
 
 CREATE TYPE legality as(
     standard_f text,
@@ -66,7 +58,7 @@ CREATE TYPE related_uris as(
 
 Create TYPE card_faces as(
 	artist          text,
-	artis_id        text,
+	artist_id        text,
 	cmc             integer,
 	color_indicator  text[],
 	colors          text[],
@@ -87,15 +79,12 @@ Create TYPE card_faces as(
 	printed_type_line text,
 	toughness      text,
 	type_line       text,
-	watermark      text,
+	watermark      text
     
 );
-
-CREATE TABLE keywords (
-    keyword_id integer,
-    keyword_name text not null,
-    PRIMARY KEY (keyword_id)
-);
+CREATE TABLE card_faces (
+    
+)
 
 CREATE TABLE mtg_set (
     set_id text,
@@ -119,9 +108,7 @@ CREATE TABLE cards (
     oracle_text text,
     power text,
     toughness text,
-    colors text[],
     color_identity text[],
-    keywords text[],
     produced_mana text[],
     reserved boolean not null,
     rulings_uri text,
@@ -129,7 +116,7 @@ CREATE TABLE cards (
     defense text,
     loyalty text,
     color_indicator text[],
-    card_faces card_faces,
+    card_faces card_faces[], --hold off for now
     edhrec_rank integer,
     hand_modifier text,
     life_modifier text,
@@ -139,12 +126,19 @@ CREATE TABLE cards (
 
     
 
-    PRIMARY KEY (card_name, oracle_id)
+    PRIMARY KEY (card_name)
 );
-CREATE TABLE card_keywords (
-    keyword_id integer REFERENCES keywords (keyword_id),
+
+CREATE TABLE card_colors (
     card_name text REFERENCES cards (card_name),
-    PRIMARY KEY (keyword_id, card_name)
+    color text,
+    PRIMARY KEY (color, card_name)
+)
+
+CREATE TABLE card_keywords (
+    keyword text,
+    card_name text REFERENCES cards (card_name),
+    PRIMARY KEY (keyword, card_name)
 );
 CREATE TABLE prints (
     print_id integer,
@@ -175,15 +169,20 @@ CREATE TABLE prints (
     related_articles related_uris,
     card_name text REFERENCES cards (card_name),
     prints_search_uri text,
-    all_parts all_parts[],
+    all_parts all_parts[], --dont touch for now
     flavor_name text,
     frame_effects text[],
     security_stamp text,
     previewed_at text,
     previewed_source_uri text,
     previewsource text,
-
-
+    
+    png_uri text,
+    boarder_crop_uri text,
+    art_crop_uri text,
+    large_uri text,
+    normal_uri text,
+    small_uri text,
 
     PRIMARY KEY (print_id) --card_name, set_id, booster
 );
