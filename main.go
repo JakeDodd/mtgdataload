@@ -141,34 +141,48 @@ func main() {
 				log.Println(card.Name)
 				log.Fatal(err)
 			}
+			if len(card.CardFaces) > 2 {
+				log.Println(card.Name)
+				log.Println(card.CardFaces)
+			}
 			//use card object to build all insert statements for card object and run those insert statements
 			// if card.Name == "Balloon Stand" {
 			// 	log.Print(card.AttractionLights)
 			// }
-			colors := array2String(card.Colors)
-			colorIdentity := array2String(card.ColorIdentity)
-			keywords := array2String(card.Keywords)
-			producedMana := array2String(card.ProducedMana)
-			colorIndicator := array2String(card.ColorIndicator)
+			// colors := array2String(card.Colors)
+			// colorIdentity := array2String(card.ColorIdentity)
+			// keywords := array2String(card.Keywords)
+			// producedMana := array2String(card.ProducedMana)
+			// colorIndicator := array2String(card.ColorIndicator)
 
-			keywordsSql := fmt.Sprintf("INSERT into cards (\"object\", oracle_id, card_name, scryfall_uri, layout, mana_cost, cmc, type_line, oracle_text, power,"+
-				" toughness, colors, color_identity, keywords, produced_mana, reserved, rulings_uri, legalities, defense, loyalty, color_indicator, card_faces, edhrec_rank, "+
-				"hand_modifier, life_modifier, attraction_lights, content_warning) "+
-				"VALUES ('%s','%s','%s', '%s', '%s', '%s', %s, '%s', '%s', '%s', '%s', '{%s}', '{%s}', '{%s}','{%s}', %s, '%s', row('%s', '%s', '%s', '%s', '%s', '%s', "+
-				"'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')::legality, '%s', '%s', '{%s}', '{%s}', %d, '%s','%s', '{%s}', %s)",
-				card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, strconv.FormatFloat(card.Cmc, 'f', -1, 64), card.TypeLine, card.OracleText, card.Power,
-				card.Toughness, colors, colorIdentity, keywords, producedMana, ternary(card.Reserved, "true", "false"), card.RulingsUri,
-				card.Legalities.Standard, card.Legalities.Future, card.Legalities.Historic, card.Legalities.Timeless, card.Legalities.Gladiator, card.Legalities.Pioneer,
-				card.Legalities.Explorer, card.Legalities.Modern, card.Legalities.Legacy,
-				card.Legalities.Pauper, card.Legalities.Vintage, card.Legalities.Penny, card.Legalities.Commander, card.Legalities.Oathbreaker,
-				card.Legalities.StandardBrawl, card.Legalities.Brawl, card.Legalities.Alchemy, card.Legalities.PauperCommander, card.Legalities.Duel,
-				card.Legalities.Oldschool, card.Legalities.Premodern, card.Legalities.Predh, card.Defense, card.Loyalty, colorIndicator, createCardFacesString(card.CardFaces),
-				card.EdhrecRank, card.HandModifier, card.LifeModifier, intArray2String(card.AttractionLights), ternary(card.ContentWarning, "true", "false"))
-			_, err := db.Query(keywordsSql)
-			if err != nil {
-				log.Print(keywordsSql)
-				log.Fatal(err)
-			}
+			// stmt, err := db.Prepare("INSERT into cards (\"object\", oracle_id, card_name, scryfall_uri, layout, mana_cost, cmc, type_line, oracle_text, power,"+
+			// 	" toughness, colors, color_identity, keywords, produced_mana, reserved, rulings_uri, legalities, defense, loyalty, color_indicator, card_faces, edhrec_rank, "+
+			// 	"hand_modifier, life_modifier, attraction_lights, content_warning) "+
+			// 	"VALUES ($1,$2,$3, $4, $5, $6, $7, $8, $9, $10, $11, '{%s}', '{%s}', '{%s}','{%s}', $16, $17, row('%s', '%s', '%s', '%s', '%s', '%s', "+
+			// 	"'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')::legality, $, $, '{%s}', '{%s}', $, $, $, '{%s}', $)",
+			// 	card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, strconv.FormatFloat(card.Cmc, 'f', -1, 64), card.TypeLine, card.OracleText, card.Power,
+			// 	card.Toughness, colors, colorIdentity, keywords, producedMana, ternary(card.Reserved, "true", "false"), card.RulingsUri,
+			// 	card.Legalities.Standard, card.Legalities.Future, card.Legalities.Historic, card.Legalities.Timeless, card.Legalities.Gladiator, card.Legalities.Pioneer,
+			// 	card.Legalities.Explorer, card.Legalities.Modern, card.Legalities.Legacy,
+			// 	card.Legalities.Pauper, card.Legalities.Vintage, card.Legalities.Penny, card.Legalities.Commander, card.Legalities.Oathbreaker,
+			// 	card.Legalities.StandardBrawl, card.Legalities.Brawl, card.Legalities.Alchemy, card.Legalities.PauperCommander, card.Legalities.Duel,
+			// 	card.Legalities.Oldschool, card.Legalities.Premodern, card.Legalities.Predh, card.Defense, card.Loyalty, colorIndicator, createCardFacesString(card.CardFaces),
+			// 	card.EdhrecRank, card.HandModifier, card.LifeModifier, intArray2String(card.AttractionLights), ternary(card.ContentWarning, "true", "false"))
+			// _, err := db.Query(keywordsSql)
+			// if err != nil {
+			// 	log.Print(keywordsSql)
+			// 	log.Fatal(err)
+			// }
+			//stmt, err := db.Prepare("INSERT INTO test (text) VALUES ($1)")
+			// mtgSetsSql := fmt.Sprintf("INSERT into (set_id, set_code, set_name, set_type, set_uri, set_search_uri, scryfall_set_uri)" +
+			// "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')", models.MtgSet.SetId, models.MtgSet.SetCode, models.MtgSet.SetName, models.MtgSet.SetType,
+			// models.MtgSet.SetUri, models.MtgSet.ScryfallSetUri)
+			// _, err := db.Query(mtgSetsSql)
+			// if err != nil {
+			// 	log.Print(mtgSetsSql)
+			// 	log.Fatal(err)
+			// }
+
 		}
 
 	}
