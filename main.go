@@ -51,27 +51,6 @@ func intArray2String(arr []int) string {
 	return result
 }
 
-func createCardFacesString(arr []models.CardFaces) string {
-	//{row(a, b, c), row(a, b, c), ...}
-	var result string
-	for i := 0; i < len(arr); i++ {
-		cf := arr[i]
-		colorIndicator := array2String(cf.ColorIndicator)
-		colors := array2String(cf.Colors)
-		cmc := strconv.FormatFloat(cf.Cmc, 'f', -1, 64)
-		row := "row('" + cf.Artist + "','" + cf.ArtistId + "'," + cmc + ",'{" + colorIndicator + "}','{" + colors + "}'," +
-			cf.Defense + "','" + cf.FlavorText + "','" + cf.IllustrationId + ", row('" + cf.ImageUris.Png + "','" + cf.ImageUris.BorderCrop + "','" +
-			cf.ImageUris.ArtCrop + "','" + cf.ImageUris.Large + "','" + cf.ImageUris.Normal + "','" + cf.ImageUris.Small + "')::image_uris,'" +
-			cf.Layout + "','" + cf.Loyalty + "','" + cf.ManaCost + "','" + cf.Name + "','" + cf.Object + "','" + cf.OracleId + "','" + cf.OracleText + "','" +
-			cf.Power + "','" + cf.PrintedName + "','" + cf.PrintedText + "','" + cf.PrintedTypeLine + "','" + cf.Toughness + "','" + cf.TypeLine + "','" + cf.Watermark + "')::card_faces"
-		result += row
-		if i < len(arr)-1 {
-			result += ","
-		}
-	}
-	return result
-}
-
 func ternary(b bool, t string, f string) string {
 	if b {
 		return t
@@ -81,6 +60,7 @@ func ternary(b bool, t string, f string) string {
 }
 
 func main() {
+
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s",
 		host, port, user, password, dbname)
@@ -95,26 +75,10 @@ func main() {
 		panic(err)
 	}
 
-	rows, err := db.Query(`select * from keywords k`)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var name string
-		var id int
-		if err := rows.Scan(&id, &name); err != nil {
-			log.Fatal(err)
-		}
-		log.Print(name)
-	}
-
 	defer db.Close()
 
 	var card models.FileCard
-	file, err := os.Open("all-cards-20241022215316.json")
+	file, err := os.Open("all-cards-20250131102123.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -141,10 +105,7 @@ func main() {
 				log.Println(card.Name)
 				log.Fatal(err)
 			}
-			if len(card.CardFaces) > 2 {
-				log.Println(card.Name)
-				log.Println(card.CardFaces)
-			}
+
 			//use card object to build all insert statements for card object and run those insert statements
 			// if card.Name == "Balloon Stand" {
 			// 	log.Print(card.AttractionLights)
