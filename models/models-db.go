@@ -35,7 +35,7 @@ type Cards struct {
 	ColorIdentity    []string `json:"color_identity"`
 	Keywords         []string `json:"keywords"`
 	ProducedMana     []string `json:"produced_mana"`
-	AttractionLights []string
+	AttractionLights []int
 	Reserved         bool   `json:"reserved"`
 	RulingsUri       string `json:"rulings_uri"`
 	StandardF        bool
@@ -53,8 +53,8 @@ type Cards struct {
 	CommanderF       bool
 	OathbreakerF     bool
 	StandardbrawlF   bool
-	brawlF           bool
-	alchemyF         bool
+	BrawlF           bool
+	AlchemyF         bool
 	PaupercommanderF bool
 	DuelF            bool
 	OldschoolF       bool

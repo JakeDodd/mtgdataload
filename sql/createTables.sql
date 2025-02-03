@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS lang_finish, lang_promo, lang_purchase_uri, print_lang, print_related, print_border_effect, print_game, print_multiverse_id,  prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, card_attraction_light, card_faces_color, card_faces_color_identity, card_card_faces, card_faces, cards, mtg_set, related CASCADE;
+DROP TABLE IF EXISTS lang_finish, lang_promo, lang_purchase_uri, print_lang, print_related, print_border_effect, print_game, print_multiverse_id,  prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, card_attraction_light, card_faces_color, card_faces_color_indicator, card_card_faces, card_faces, cards, mtg_set, related CASCADE;
 
 CREATE TABLE related (
     object_parts text,
@@ -28,7 +28,7 @@ CREATE TABLE cards (
     scryfall_uri text not null,
     layout text not null,
     mana_cost text,
-    cmc integer not null,
+    cmc decimal not null,
     type_line text not null,
     oracle_text text,
     power text,
@@ -107,7 +107,7 @@ CREATE TABLE card_faces (
     card_name          text,
     artist          text,
     artist_id        text,
-    cmc             integer,
+    cmc             decimal,
     defense         text,
     flavor_text      text,
     illustration_id  text,
@@ -141,7 +141,7 @@ CREATE TABLE card_faces_color (
     PRIMARY KEY (card_name, color)
 );
 
-CREATE TABLE card_faces_color_identity (
+CREATE TABLE card_faces_color_indicator (
     card_name text REFERENCES card_faces (card_name),
     color text,
 

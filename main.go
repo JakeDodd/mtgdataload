@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/JakeDodd/mtgdataload/database"
 	"github.com/JakeDodd/mtgdataload/models"
 
 	"database/sql"
@@ -59,6 +60,14 @@ func ternary(b bool, t string, f string) string {
 	}
 }
 
+func ternary_f(s string) bool {
+	if s == "legal" {
+		return true
+	} else {
+		return false
+	}
+}
+
 func main() {
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
@@ -85,6 +94,7 @@ func main() {
 
 	reader := bufio.NewReader(file)
 	start := time.Now()
+	var lines, inserts int
 	for true {
 		line, err := reader.ReadString('\n')
 		if err != nil {
@@ -110,25 +120,33 @@ func main() {
 			// if card.Name == "Balloon Stand" {
 			// 	log.Print(card.AttractionLights)
 			// }
-			// colors := array2String(card.Colors)
-			// colorIdentity := array2String(card.ColorIdentity)
-			// keywords := array2String(card.Keywords)
-			// producedMana := array2String(card.ProducedMana)
-			// colorIndicator := array2String(card.ColorIndicator)
+			_, err := database.GetCardByName(card.Name, db)
 
-			// stmt, err := db.Prepare("INSERT into cards (\"object\", oracle_id, card_name, scryfall_uri, layout, mana_cost, cmc, type_line, oracle_text, power,"+
-			// 	" toughness, colors, color_identity, keywords, produced_mana, reserved, rulings_uri, legalities, defense, loyalty, color_indicator, card_faces, edhrec_rank, "+
-			// 	"hand_modifier, life_modifier, attraction_lights, content_warning) "+
-			// 	"VALUES ($1,$2,$3, $4, $5, $6, $7, $8, $9, $10, $11, '{%s}', '{%s}', '{%s}','{%s}', $16, $17, row('%s', '%s', '%s', '%s', '%s', '%s', "+
-			// 	"'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')::legality, $, $, '{%s}', '{%s}', $, $, $, '{%s}', $)",
-			// 	card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, strconv.FormatFloat(card.Cmc, 'f', -1, 64), card.TypeLine, card.OracleText, card.Power,
-			// 	card.Toughness, colors, colorIdentity, keywords, producedMana, ternary(card.Reserved, "true", "false"), card.RulingsUri,
-			// 	card.Legalities.Standard, card.Legalities.Future, card.Legalities.Historic, card.Legalities.Timeless, card.Legalities.Gladiator, card.Legalities.Pioneer,
-			// 	card.Legalities.Explorer, card.Legalities.Modern, card.Legalities.Legacy,
-			// 	card.Legalities.Pauper, card.Legalities.Vintage, card.Legalities.Penny, card.Legalities.Commander, card.Legalities.Oathbreaker,
-			// 	card.Legalities.StandardBrawl, card.Legalities.Brawl, card.Legalities.Alchemy, card.Legalities.PauperCommander, card.Legalities.Duel,
-			// 	card.Legalities.Oldschool, card.Legalities.Premodern, card.Legalities.Predh, card.Defense, card.Loyalty, colorIndicator, createCardFacesString(card.CardFaces),
-			// 	card.EdhrecRank, card.HandModifier, card.LifeModifier, intArray2String(card.AttractionLights), ternary(card.ContentWarning, "true", "false"))
+			if err != nil && err != database.CardNotFound {
+				log.Fatal(err)
+			}
+
+			if err == database.CardNotFound {
+				rows, err := db.Query("INSERT into cards (\"object\", oracle_id, card_name, scryfall_uri, layout, mana_cost, cmc, type_line, oracle_text, power,"+
+					" toughness, reserved, rulings_uri, standard_f, future_f, historic_f, timeless_f, gladiator_f, pioneer_f, explorer_f, modern_f, legacy_f, pauper_f, vintage_f, penny_f, commander_f, oathbreaker_f, standardbrawl_f, brawl_f, alchemy_f, paupercommander_f, duel_f, oldschool_f, premodern_f, predh_f, defense, loyalty, edhrec_rank, "+
+					"hand_modifier, life_modifier, content_warning) "+
+					"VALUES ($1,$2,$3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41)",
+					card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, strconv.FormatFloat(card.Cmc, 'f', -1, 64), card.TypeLine, card.OracleText, card.Power,
+					card.Toughness, card.Reserved, card.RulingsUri,
+					ternary_f(card.Legalities.Standard), ternary_f(card.Legalities.Future), ternary_f(card.Legalities.Historic), ternary_f(card.Legalities.Timeless), ternary_f(card.Legalities.Gladiator), ternary_f(card.Legalities.Pioneer),
+					ternary_f(card.Legalities.Explorer), ternary_f(card.Legalities.Modern), ternary_f(card.Legalities.Legacy),
+					ternary_f(card.Legalities.Pauper), ternary_f(card.Legalities.Vintage), ternary_f(card.Legalities.Penny), ternary_f(card.Legalities.Commander), ternary_f(card.Legalities.Oathbreaker),
+					ternary_f(card.Legalities.StandardBrawl), ternary_f(card.Legalities.Brawl), ternary_f(card.Legalities.Alchemy), ternary_f(card.Legalities.PauperCommander), ternary_f(card.Legalities.Duel),
+					ternary_f(card.Legalities.Oldschool), ternary_f(card.Legalities.Premodern), ternary_f(card.Legalities.Predh), card.Defense, card.Loyalty,
+					card.EdhrecRank, card.HandModifier, card.LifeModifier, card.ContentWarning)
+				if err != nil {
+					log.Fatal(err)
+				}
+				rows.Close()
+				inserts++
+			}
+			lines++
+			fmt.Printf("\rLines Complete: %d | Inserts complete: %d", lines, inserts)
 			// _, err := db.Query(keywordsSql)
 			// if err != nil {
 			// 	log.Print(keywordsSql)
