@@ -1,3 +1,4 @@
 *.json
 mtgdataload
 *.txt
+*core*

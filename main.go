@@ -21,8 +21,8 @@ import (
 const (
 	host     = "localhost"
 	port     = 5432
-	user     = "postgres"
-	password = "postgres"
+	user     = "mtg"
+	password = "mtg"
 	dbname   = "mtgdataload"
 )
 
@@ -87,7 +87,7 @@ func main() {
 	defer db.Close()
 
 	var card models.FileCard
-	file, err := os.Open("all-cards-20250131102123.json")
+	file, err := os.Open("all-cards-20241022092120.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -120,47 +120,27 @@ func main() {
 			// if card.Name == "Balloon Stand" {
 			// 	log.Print(card.AttractionLights)
 			// }
-			_, err := database.GetCardByName(card.Name, db)
+			existing, err := database.GetCardByName(card.Name, db)
 
 			if err != nil && err != database.CardNotFound {
 				log.Fatal(err)
 			}
 
 			if err == database.CardNotFound {
-				rows, err := db.Query("INSERT into cards (\"object\", oracle_id, card_name, scryfall_uri, layout, mana_cost, cmc, type_line, oracle_text, power,"+
-					" toughness, reserved, rulings_uri, standard_f, future_f, historic_f, timeless_f, gladiator_f, pioneer_f, explorer_f, modern_f, legacy_f, pauper_f, vintage_f, penny_f, commander_f, oathbreaker_f, standardbrawl_f, brawl_f, alchemy_f, paupercommander_f, duel_f, oldschool_f, premodern_f, predh_f, defense, loyalty, edhrec_rank, "+
-					"hand_modifier, life_modifier, content_warning) "+
-					"VALUES ($1,$2,$3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41)",
-					card.Object, card.OracleId, card.Name, card.ScryfallUri, card.Layout, card.ManaCost, strconv.FormatFloat(card.Cmc, 'f', -1, 64), card.TypeLine, card.OracleText, card.Power,
-					card.Toughness, card.Reserved, card.RulingsUri,
-					ternary_f(card.Legalities.Standard), ternary_f(card.Legalities.Future), ternary_f(card.Legalities.Historic), ternary_f(card.Legalities.Timeless), ternary_f(card.Legalities.Gladiator), ternary_f(card.Legalities.Pioneer),
-					ternary_f(card.Legalities.Explorer), ternary_f(card.Legalities.Modern), ternary_f(card.Legalities.Legacy),
-					ternary_f(card.Legalities.Pauper), ternary_f(card.Legalities.Vintage), ternary_f(card.Legalities.Penny), ternary_f(card.Legalities.Commander), ternary_f(card.Legalities.Oathbreaker),
-					ternary_f(card.Legalities.StandardBrawl), ternary_f(card.Legalities.Brawl), ternary_f(card.Legalities.Alchemy), ternary_f(card.Legalities.PauperCommander), ternary_f(card.Legalities.Duel),
-					ternary_f(card.Legalities.Oldschool), ternary_f(card.Legalities.Premodern), ternary_f(card.Legalities.Predh), card.Defense, card.Loyalty,
-					card.EdhrecRank, card.HandModifier, card.LifeModifier, card.ContentWarning)
+				err = database.SaveCard(card.FileCardToCard(), db)
 				if err != nil {
 					log.Fatal(err)
 				}
-				rows.Close()
 				inserts++
+			} else {
+				if !existing.CompareCards(card.FileCardToCard()) {
+					fmt.Printf("%+v\n", existing)
+					fmt.Printf("%+v\n", card.FileCardToCard())
+					log.Panic("AH")
+				}
 			}
 			lines++
 			fmt.Printf("\rLines Complete: %d | Inserts complete: %d", lines, inserts)
-			// _, err := db.Query(keywordsSql)
-			// if err != nil {
-			// 	log.Print(keywordsSql)
-			// 	log.Fatal(err)
-			// }
-			//stmt, err := db.Prepare("INSERT INTO test (text) VALUES ($1)")
-			// mtgSetsSql := fmt.Sprintf("INSERT into (set_id, set_code, set_name, set_type, set_uri, set_search_uri, scryfall_set_uri)" +
-			// "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')", models.MtgSet.SetId, models.MtgSet.SetCode, models.MtgSet.SetName, models.MtgSet.SetType,
-			// models.MtgSet.SetUri, models.MtgSet.ScryfallSetUri)
-			// _, err := db.Query(mtgSetsSql)
-			// if err != nil {
-			// 	log.Print(mtgSetsSql)
-			// 	log.Fatal(err)
-			// }
 
 		}
 
