@@ -15,15 +15,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "mtg"
-	password = "mtg"
-	dbname   = "mtgdataload"
 )
 
 // TODO
@@ -69,6 +62,12 @@ func ternary_f(s string) bool {
 }
 
 func main() {
+	host := os.Getenv("pg_host")
+	port, _ := strconv.Atoi(os.Getenv("pg_port"))
+	user := os.Getenv("pg_user")
+	password := os.Getenv("pg_password")
+	dbname := os.Getenv("pg_dbname")
+	filename := os.Getenv("data_filename")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s",
@@ -86,8 +85,7 @@ func main() {
 
 	defer db.Close()
 
-	var card models.FileCard
-	file, err := os.Open("all-cards-20241022092120.json")
+	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,11 +94,14 @@ func main() {
 	start := time.Now()
 	var lines, inserts int
 	for true {
+		var card models.FileCard = models.FileCard{}
 		line, err := reader.ReadString('\n')
 		if err != nil {
 
 			break
 		}
+
+		lines++
 		//line starts with [ and ends with ], we dont want to unmarshal the first and last line
 		if line != "[\n" && line != "]" {
 			//removing new line character, remove the comma in all but the last line, theres no comma in last line
@@ -120,26 +121,35 @@ func main() {
 			// if card.Name == "Balloon Stand" {
 			// 	log.Print(card.AttractionLights)
 			// }
-			existing, err := database.GetCardByName(card.Name, db)
+			if card.Layout != "token" && card.Layout != "art_series" && card.Layout != "double_faced_token" && card.SetType != "memorabilia" {
+				existing, err := database.GetCardByOracleIdAndName(card.OracleId, card.Name, db)
 
-			if err != nil && err != database.CardNotFound {
-				log.Fatal(err)
-			}
-
-			if err == database.CardNotFound {
-				err = database.SaveCard(card.FileCardToCard(), db)
-				if err != nil {
+				if err != nil && err != database.CardNotFound {
 					log.Fatal(err)
 				}
-				inserts++
-			} else {
-				if !existing.CompareCards(card.FileCardToCard()) {
-					fmt.Printf("%+v\n", existing)
-					fmt.Printf("%+v\n", card.FileCardToCard())
-					log.Panic("AH")
+
+				if err == database.CardNotFound {
+					err = database.SaveCard(card.FileCardToCard(), db)
+					if err != nil {
+						log.Fatal(err)
+					}
+					inserts++
+				} else {
+					if !existing.CompareCards(card.FileCardToCard()) {
+						fmt.Printf("\n")
+						fmt.Printf("Line: \n%s\n", line)
+						fmt.Printf("Existing: \n%+v\n", existing)
+						fmt.Printf("File Card Card: \n%+v\n", card.FileCardToCard())
+						fmt.Printf("File Card: \n%+v\n", card)
+						log.Panic("AH")
+					}
 				}
 			}
-			lines++
+
+			// TODO: put sets stuff here
+
+			// end
+
 			fmt.Printf("\rLines Complete: %d | Inserts complete: %d", lines, inserts)
 
 		}

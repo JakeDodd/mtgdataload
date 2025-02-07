@@ -20,24 +20,20 @@ type Related struct {
 }
 
 type Cards struct {
-	Object           string `json:"object"`
 	OracleId         string `json:"oracle_id"`
+	Object           string `json:"object"`
 	CardName         string
-	ScryfallUri      string
 	Layout           string   `json:"layout"`
 	ManaCost         string   `json:"mana_cost"`
 	Cmc              float64  `json:"cmc"`
 	TypeLine         string   `json:"type_line"`
-	OracleText       string   `json:"oracle_text"`
 	Power            string   `json:"power"`
 	Toughness        string   `json:"toughness"`
 	Colors           []string `json:"colors"`
 	ColorIdentity    []string `json:"color_identity"`
 	Keywords         []string `json:"keywords"`
 	ProducedMana     []string `json:"produced_mana"`
-	AttractionLights []int
-	Reserved         bool   `json:"reserved"`
-	RulingsUri       string `json:"rulings_uri"`
+	Reserved         bool     `json:"reserved"`
 	StandardF        bool
 	FutureF          bool
 	HistoricF        bool
@@ -57,18 +53,15 @@ type Cards struct {
 	AlchemyF         bool
 	PaupercommanderF bool
 	DuelF            bool
-	OldschoolF       bool
 	PremodernF       bool
 	PredhF           bool
-	CardFaces        []CardFaces `json:"card_faces"`
-	ColorIndicator   []string    `json:"color_indicator"`
-	Defense          string      `json:"defense"`
-	Loyalty          string      `json:"loyalty"`
-	EdhrecRank       int         `json:"edhrec_rank"`
-	HandModifier     string      `json:"hand_modifier"`
-	LifeModifier     string      `json:"life_modifier"`
-	PennyRank        int         `json:"penny_rank"`
-	ContentWarning   bool        `json:"content_warning"`
+	ColorIndicator   []string `json:"color_indicator"`
+	Defense          string   `json:"defense"`
+	Loyalty          string   `json:"loyalty"`
+	EdhrecRank       int      `json:"edhrec_rank"`
+	HandModifier     string   `json:"hand_modifier"`
+	LifeModifier     string   `json:"life_modifier"`
+	PennyRank        int      `json:"penny_rank"`
 }
 
 type CardFaces struct {
@@ -103,29 +96,34 @@ type CardFaces struct {
 }
 
 type Prints struct {
-	PrintId           int      `json:"print_id"`
-	MultiverseIds     []int    `json:"multiverse_ids"`
-	MtgoId            int      `json:"mtgo_id"`
-	MtgoFoilId        int      `json:"mtgo_foil_id"`
-	ArenaId           int      `json:"arena_id"`
+	PrintId           int   `json:"print_id"`
+	MultiverseIds     []int `json:"multiverse_ids"`
+	MtgoId            int   `json:"mtgo_id"`
+	MtgoFoilId        int   `json:"mtgo_foil_id"`
+	ArenaId           int   `json:"arena_id"`
+	ScryfallUri       string
+	RulingsUri        string   `json:"rulings_uri"`
 	TcgplayerId       int      `json:"tcgplayer_id"`
 	TcgplayerEtchedId int      `json:"tcgplayer_etched_id"`
 	ReleasedAt        string   `json:"released_at"`
 	Games             []string `json:"games"`
-	Oversized         bool     `json:"oversized"`
-	SetId             string   `json:"set_id"`
-	CollectorNumber   string   `json:"collector_number"`
-	Digital           bool     `json:"digital"`
-	Rarity            string   `json:"rarity"`
-	Card_backId       string   `json:"card_back_id"`
-	Artist            string   `json:"artist"`
-	IllustrationId    string   `json:"illustration_id"`
-	BorderColor       string   `json:"border_color"`
-	Frame             string   `json:"frame"`
-	FullArt           bool     `json:"full_art"`
-	Textless          bool     `json:"textless"`
-	Booster           bool     `json:"booster"`
-	StorySpotlight    bool     `json:"story_spotlight"`
+	AttractionLights  []int
+	Oversized         bool   `json:"oversized"`
+	SetId             string `json:"set_id"`
+	OracleText        string `json:"oracle_text"`
+	CollectorNumber   string `json:"collector_number"`
+	Digital           bool   `json:"digital"`
+	Rarity            string `json:"rarity"`
+	OldschoolF        bool
+	Card_backId       string `json:"card_back_id"`
+	Artist            string `json:"artist"`
+	IllustrationId    string `json:"illustration_id"`
+	BorderColor       string `json:"border_color"`
+	Frame             string `json:"frame"`
+	FullArt           bool   `json:"full_art"`
+	Textless          bool   `json:"textless"`
+	Booster           bool   `json:"booster"`
+	StorySpotlight    bool   `json:"story_spotlight"`
 	GathererUri       string
 	TcgArticlesUri    string
 	TcgDecksUri       string
@@ -142,6 +140,7 @@ type Prints struct {
 	Previewed_at      string    `json:"preview.previewed_at"`
 	PreviewUri        string    `json:"preview.source_uri"`
 	PreviewSource     string    `json:"preview.source"`
+	ContentWarning    bool      `json:"content_warning"`
 }
 
 type PrintLangs struct {
@@ -163,12 +162,13 @@ type PrintLangs struct {
 	PriceEur        string
 	PriceEurFoil    string
 	PriceTix        string
-	PrintId         int    `json:"print_id"`
-	PrintedName     string `json:"printed_name"`
-	PrintedText     string `json:"printed_text"`
-	PrintedTypeLine string `json:"printed_type_line"`
-	FlavorText      string `json:"flavor_text"`
-	CardmarketId    int    `json:"cardmarket_id"`
-	Uri             string `json:"uri"`
-	Id              string `json:"id"`
+	PrintId         int         `json:"print_id"`
+	PrintedName     string      `json:"printed_name"`
+	PrintedText     string      `json:"printed_text"`
+	PrintedTypeLine string      `json:"printed_type_line"`
+	FlavorText      string      `json:"flavor_text"`
+	CardmarketId    int         `json:"cardmarket_id"`
+	Uri             string      `json:"uri"`
+	Id              string      `json:"id"`
+	CardFaces       []CardFaces `json:"card_faces"`
 }

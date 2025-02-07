@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS lang_finish, lang_promo, lang_purchase_uri, print_lang, print_related, print_border_effect, print_game, print_multiverse_id,  prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, card_attraction_light, card_faces_color, card_faces_color_indicator, card_card_faces, card_faces, cards, mtg_set, related CASCADE;
+DROP TABLE IF EXISTS lang_finish, lang_promo, lang_purchase_uri, print_lang, print_related, print_border_effect, print_game, print_multiverse_id,  prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, print_attraction_light, card_faces_color, card_faces_color_indicator, print_lang_card_faces, card_faces, cards, mtg_set, related CASCADE;
 
 CREATE TABLE related (
     object_parts text,
@@ -22,19 +22,16 @@ CREATE TABLE mtg_set (
 );
 
 CREATE TABLE cards (
-    object text not null,
     oracle_id text not null, 
+    object text not null,
     card_name text not null,
-    scryfall_uri text not null,
     layout text not null,
     mana_cost text,
     cmc decimal not null,
     type_line text not null,
-    oracle_text text,
     power text,
     toughness text,
     reserved boolean not null,
-    rulings_uri text,
     standard_f boolean,
     future_f boolean,
     historic_f boolean,
@@ -54,7 +51,6 @@ CREATE TABLE cards (
     alchemy_f boolean,
     paupercommander_f boolean,
     duel_f boolean,
-    oldschool_f boolean,
     premodern_f boolean,
     predh_f boolean,
     defense text,
@@ -62,45 +58,48 @@ CREATE TABLE cards (
     edhrec_rank integer,
     hand_modifier text,
     life_modifier text,
-    content_warning boolean,
 
-    PRIMARY KEY (card_name)
+    PRIMARY KEY (card_name, oracle_id)
 );
 
 CREATE TABLE card_color (
-    card_name text REFERENCES cards (card_name),
+    card_name text ,
+    oracle_id text ,
     color text,
-    PRIMARY KEY (color, card_name)
+    FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
+    PRIMARY KEY (color, card_name, oracle_id)
 );
 
 CREATE TABLE card_color_identity (
-    card_name text REFERENCES cards (card_name),
+    card_name text ,
+    oracle_id text ,
     color text,
-    PRIMARY KEY (color, card_name)
+    FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
+    PRIMARY KEY (color, card_name, oracle_id)
 );
 
 CREATE TABLE card_produced_mana (
-    card_name text REFERENCES cards (card_name),
+    card_name text ,
+    oracle_id text ,
     color text,
-    PRIMARY KEY (color, card_name)
+    FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
+    PRIMARY KEY (color, card_name, oracle_id)
 );
 
 CREATE TABLE card_color_indicator (
-    card_name text REFERENCES cards (card_name),
+    card_name text ,
+    oracle_id text ,
     color text,
-    PRIMARY KEY (color, card_name)
-);
-
-CREATE TABLE card_attraction_light (
-    card_name text REFERENCES cards (card_name),
-    attraction_light integer,
-    PRIMARY KEY (attraction_light, card_name)
+    FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
+    PRIMARY KEY (color, card_name, oracle_id)
 );
 
 CREATE TABLE card_keyword (
+    card_name text ,
     keyword text,
-    card_name text REFERENCES cards (card_name),
-    PRIMARY KEY (keyword, card_name)
+    oracle_id text ,
+    FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
+    PRIMARY KEY (keyword, card_name, oracle_id)
 );
 
 CREATE TABLE card_faces (
@@ -148,25 +147,23 @@ CREATE TABLE card_faces_color_indicator (
     PRIMARY KEY (card_name, color)
 );
 
-CREATE TABLE card_card_faces (
-    card_card_name text REFERENCES cards (card_name),
-    card_faces_card_name text REFERENCES card_faces (card_name),
-
-    PRIMARY KEY (card_card_name, card_faces_card_name)
-);
 
 CREATE TABLE prints (
     print_id integer,
     mtgo_id integer, 
     mtgo_foil_id integer,
     arena_id integer,
+    scryfall_uri text not null,
+    rulings_uri text,
     tcgplayer_id integer,
     tcgplayer_etched_id integer,
     released_at text not null,
     oversized boolean not null,
     set_id text REFERENCES mtg_set (set_id),
+    oracle_text text,
     collector_number text,
     digital boolean not null,
+    oldschool_f boolean,
     rarity text,
     card_back_id text not null, --is the normal mtg card back considered a card in this database
     artist text,
@@ -184,15 +181,24 @@ CREATE TABLE prints (
     tcg_buy_uri text,
     cardmarket_buy_uri text,
     cardhoarder_buy_uri text,
-    card_name text REFERENCES cards (card_name),
+    oracle_id text,
+    card_name text,
     prints_search_uri text,
     flavor_name text,
     security_stamp text,
     previewed_at text,
     previewed_source_uri text,
     previewsource text,
+    content_warning boolean,
 
+    FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
     PRIMARY KEY (print_id) --card_name, set_id, booster
+);
+
+CREATE TABLE print_attraction_light (
+    print_id integer REFERENCES prints (print_id),
+    attraction_light integer,
+    PRIMARY KEY (attraction_light, print_id)
 );
 
 CREATE TABLE print_multiverse_id (
@@ -254,6 +260,15 @@ CREATE TABLE print_lang (
     small_uri text,
 
     PRIMARY KEY (print_id, lang)
+);
+
+CREATE TABLE print_lang_card_faces (
+    lang text ,
+    print_id integer ,
+    card_faces_card_name text REFERENCES card_faces (card_name),
+
+    FOREIGN KEY (print_id, lang) REFERENCES print_lang (print_id, lang),
+    PRIMARY KEY (lang, print_id, card_faces_card_name)
 );
 
 CREATE TABLE lang_finish (

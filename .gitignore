@@ -2,3 +2,4 @@
 mtgdataload
 *.txt
 *core*
+.env

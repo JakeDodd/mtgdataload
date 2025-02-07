@@ -15,24 +15,20 @@ func ternary_f(s string) bool {
 
 func (fc FileCard) FileCardToCard() Cards {
 	card := Cards{
-		Object:           fc.Object,
 		OracleId:         fc.OracleId,
+		Object:           fc.Object,
 		CardName:         fc.Name,
-		ScryfallUri:      fc.ScryfallUri,
 		Layout:           fc.Layout,
 		ManaCost:         fc.ManaCost,
 		Cmc:              fc.Cmc,
 		TypeLine:         fc.TypeLine,
-		OracleText:       fc.OracleText,
 		Power:            fc.Power,
 		Toughness:        fc.Toughness,
 		Colors:           fc.Colors,
 		ColorIdentity:    fc.ColorIdentity,
 		Keywords:         fc.Keywords,
 		ProducedMana:     fc.ProducedMana,
-		AttractionLights: fc.AttractionLights,
 		Reserved:         fc.Reserved,
-		RulingsUri:       fc.RulingsUri,
 		StandardF:        ternary_f(fc.Legalities.Standard),
 		FutureF:          ternary_f(fc.Legalities.Future),
 		HistoricF:        ternary_f(fc.Legalities.Historic),
@@ -52,17 +48,14 @@ func (fc FileCard) FileCardToCard() Cards {
 		AlchemyF:         ternary_f(fc.Legalities.Alchemy),
 		PaupercommanderF: ternary_f(fc.Legalities.PauperCommander),
 		DuelF:            ternary_f(fc.Legalities.Duel),
-		OldschoolF:       ternary_f(fc.Legalities.Oldschool),
 		PremodernF:       ternary_f(fc.Legalities.Premodern),
 		PredhF:           ternary_f(fc.Legalities.Predh),
-		CardFaces:        fc.CardFaces,
 		Defense:          fc.Defense,
 		Loyalty:          fc.Loyalty,
 		EdhrecRank:       fc.EdhrecRank,
 		HandModifier:     fc.HandModifier,
 		LifeModifier:     fc.LifeModifier,
 		PennyRank:        fc.PennyRank,
-		ContentWarning:   fc.ContentWarning,
 	}
 	return card
 }
@@ -77,21 +70,17 @@ func (c1 Cards) CompareCards(c2 Cards) bool {
 	return c1.Object == c2.Object &&
 		c1.OracleId == c2.OracleId &&
 		c1.CardName == c2.CardName &&
-		c1.ScryfallUri == c2.ScryfallUri &&
 		c1.Layout == c2.Layout &&
 		c1.ManaCost == c2.ManaCost &&
 		c1.Cmc == c2.Cmc &&
 		c1.TypeLine == c2.TypeLine &&
-		c1.OracleText == c2.OracleText &&
 		c1.Power == c2.Power &&
 		c1.Toughness == c2.Toughness &&
 		compareStringSlices(c1.Colors, c2.Colors) &&
 		compareStringSlices(c1.ColorIdentity, c2.ColorIdentity) &&
 		compareStringSlices(c1.Keywords, c2.Keywords) &&
 		compareStringSlices(c1.ProducedMana, c2.ProducedMana) &&
-		compareIntSlices(c1.AttractionLights, c2.AttractionLights) &&
 		c1.Reserved == c2.Reserved &&
-		c1.RulingsUri == c2.RulingsUri &&
 		c1.StandardF == c2.StandardF &&
 		c1.FutureF == c2.FutureF &&
 		c1.HistoricF == c2.HistoricF &&
@@ -111,18 +100,14 @@ func (c1 Cards) CompareCards(c2 Cards) bool {
 		c1.AlchemyF == c2.AlchemyF &&
 		c1.PaupercommanderF == c2.PaupercommanderF &&
 		c1.DuelF == c2.DuelF &&
-		c1.OldschoolF == c2.OldschoolF &&
 		c1.PremodernF == c2.PremodernF &&
 		c1.PredhF == c2.PredhF &&
-		compareCardFacesSlices(c1.CardFaces, c2.CardFaces) &&
 		compareStringSlices(c1.ColorIndicator, c2.ColorIndicator) &&
 		c1.Defense == c2.Defense &&
 		c1.Loyalty == c2.Loyalty &&
 		c1.EdhrecRank == c2.EdhrecRank &&
 		c1.HandModifier == c2.HandModifier &&
-		c1.LifeModifier == c2.LifeModifier &&
-		c1.PennyRank == c2.PennyRank &&
-		c1.ContentWarning == c2.ContentWarning
+		c1.LifeModifier == c2.LifeModifier
 }
 
 func compareStringSlices(s1 []string, s2 []string) bool {
