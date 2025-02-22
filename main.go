@@ -92,7 +92,7 @@ func main() {
 
 	reader := bufio.NewReader(file)
 	start := time.Now()
-	var lines, inserts int
+	var lines, inserts, setInserts int
 	for true {
 		var card models.FileCard = models.FileCard{}
 		line, err := reader.ReadString('\n')
@@ -146,15 +146,38 @@ func main() {
 				}
 			}
 
+			existingSet, err := database.GetSetBySetId(card.SetId, db)
+
+			if err != nil && err != database.SetNotFound {
+				log.Fatal(err)
+			}
+
+			if err == database.SetNotFound {
+				err = database.SaveSet(card.FileCardToSet(), db)
+				if err != nil {
+					log.Fatal(err)
+				}
+				setInserts++
+			} else {
+				if !existingSet.CompareSets(card.FileCardToSet()) {
+					fmt.Printf("\n")
+					fmt.Printf("Line: \n%s\n", line)
+					fmt.Printf("Existing: \n%+v\n", existingSet)
+					fmt.Printf("File Card Card: \n%+v\n", card.FileCardToSet())
+					fmt.Printf("File Card: \n%+v\n", card)
+					log.Panic("AH")
+				}
+			}
+
 			// TODO: put sets stuff here
 
 			// end
 
-			fmt.Printf("\rLines Complete: %d | Inserts complete: %d", lines, inserts)
+			fmt.Printf("\rLines Complete: %d | Inserts complete: %d | Sets Inserted: %d", lines, inserts, setInserts)
 
 		}
 
 	}
 	elapsed := time.Since(start)
-	log.Println(elapsed)
+	log.Println("\n" + elapsed)
 }

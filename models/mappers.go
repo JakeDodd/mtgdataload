@@ -110,6 +110,35 @@ func (c1 Cards) CompareCards(c2 Cards) bool {
 		c1.LifeModifier == c2.LifeModifier
 }
 
+func (fc FileCard) FileCardToSet() MtgSet {
+	set := MtgSet{
+		SetId:          fc.SetId,
+		SetCode:        fc.Set,
+		SetName:        fc.SetName,
+		SetType:        fc.SetType,
+		SetUri:         fc.SetUri,
+		SetSearchUri:   fc.SetSearchUri,
+		ScryfallSetUri: fc.ScryfallSetUri,
+	}
+	return set
+}
+
+func (s1 MtgSet) CompareSets(s2 MtgSet) bool {
+	// First, check if they are the same type
+	if reflect.TypeOf(s1) != reflect.TypeOf(s2) {
+		return false
+	}
+
+	// Compare the fields one by one
+	return s1.SetId == s2.SetId &&
+		s1.SetCode == s2.SetCode &&
+		s1.SetName == s2.SetName &&
+		s1.SetType == s2.SetType &&
+		s1.SetUri == s2.SetUri &&
+		s1.SetSearchUri == s2.SetSearchUri &&
+		s1.ScryfallSetUri == s2.ScryfallSetUri
+}
+
 func compareStringSlices(s1 []string, s2 []string) bool {
 	if len(s1) != len(s2) {
 		return false
