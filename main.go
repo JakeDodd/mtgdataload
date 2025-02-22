@@ -179,5 +179,6 @@ func main() {
 
 	}
 	elapsed := time.Since(start)
-	log.Println("\n" + elapsed)
+	log.Println()
+	log.Println(elapsed)
 }
