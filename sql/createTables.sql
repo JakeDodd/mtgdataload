@@ -7,7 +7,7 @@ CREATE TABLE related (
     card_name text,
     type_line text,
     uri text,
-    PRIMARY KEY (card_name)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE mtg_set (
@@ -149,7 +149,6 @@ CREATE TABLE card_faces_color_indicator (
 
 
 CREATE TABLE prints (
-    print_id integer,
     mtgo_id integer, 
     mtgo_foil_id integer,
     arena_id integer,
@@ -192,40 +191,47 @@ CREATE TABLE prints (
     content_warning boolean,
 
     FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
-    PRIMARY KEY (print_id) --card_name, set_id, booster
+    PRIMARY KEY (card_name, set_id) --card_name, set_id, booster
 );
 
 CREATE TABLE print_attraction_light (
-    print_id integer REFERENCES prints (print_id),
+    card_name text,
+    set_id text,
     attraction_light integer,
-    PRIMARY KEY (attraction_light, print_id)
+    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (attraction_light, card_name, set_id)
 );
 
 CREATE TABLE print_multiverse_id (
-    print_id integer REFERENCES prints (print_id),
+    card_name text, 
+    set_id text,
     multiverse_id integer,
-
-    PRIMARY KEY (print_id, multiverse_id)
+    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (card_name, set_id, multiverse_id)
 );
 
 CREATE TABLE print_game (
-    print_id integer REFERENCES prints (print_id),
+    card_name text, 
+    set_id text,
     game text,
-
-    PRIMARY KEY (print_id, game)
+    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (card_name, set_id, game)
 );
 
 CREATE TABLE print_border_effect (
-    print_id integer REFERENCES prints (print_id),
+    card_name text, 
+    set_id text,
     border_effect text,
-
-    PRIMARY KEY (print_id, border_effect)
+    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (card_name, set_id, border_effect)
 );
     
 CREATE TABLE print_related (
-    print_id integer REFERENCES prints (print_id),
-    card_name text REFERENCES related (card_name),
-    PRIMARY KEY (print_id, card_name)
+    print_card_name text, 
+    set_id text,
+    related_id text REFERENCES related (id),
+    FOREIGN KEY (print_card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (print_card_name, set_id, related_id)
 );
 
 CREATE TABLE print_lang (
@@ -246,7 +252,6 @@ CREATE TABLE print_lang (
     price_eur text,
     price_eur_foil text,
     price_tix text,
-    print_id integer REFERENCES prints (print_id),
     printed_name     text,
     printed_next     text,    
     printed_type_line text,
@@ -258,42 +263,48 @@ CREATE TABLE print_lang (
     large_uri text,
     normal_uri text,
     small_uri text,
-
-    PRIMARY KEY (print_id, lang)
+    card_name text,
+    set_id text,
+    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (card_name, set_id, lang)
 );
 
 CREATE TABLE print_lang_card_faces (
-    lang text ,
-    print_id integer ,
+    lang text,
+    card_name text,
+    set_id text,
     card_faces_card_name text REFERENCES card_faces (card_name),
 
-    FOREIGN KEY (print_id, lang) REFERENCES print_lang (print_id, lang),
-    PRIMARY KEY (lang, print_id, card_faces_card_name)
+    FOREIGN KEY (card_name, set_id, lang) REFERENCES print_lang (card_name, set_id, lang),
+    PRIMARY KEY (lang, card_name, set_id, card_faces_card_name)
 );
 
 CREATE TABLE lang_finish (
-    print_id integer,
+    card_name text,
+    set_id text,
     lang text,
     finish text,
 
-    FOREIGN KEY (print_id, lang) REFERENCES print_lang (print_id, lang),
-    PRIMARY KEY (print_id, lang, finish)
+    FOREIGN KEY (card_name, set_id, lang) REFERENCES print_lang (card_name, set_id, lang),
+    PRIMARY KEY (card_name, set_id, lang, finish)
 );
 
 CREATE TABLE lang_promo (
-    print_id integer,
+    card_name text,
+    set_id text,
     lang text,
     promo text,
 
-    FOREIGN KEY (print_id, lang) REFERENCES print_lang (print_id, lang),
-    PRIMARY KEY (print_id, lang, promo)
+    FOREIGN KEY (card_name, set_id, lang) REFERENCES print_lang (card_name, set_id, lang),
+    PRIMARY KEY (card_name, set_id, lang, promo)
 );
 
 CREATE TABLE lang_purchase_uri (
-    print_id integer,
+    card_name text,
+    set_id text,
     lang text,
     purchase_uri text,
 
-    FOREIGN KEY (print_id, lang) REFERENCES print_lang (print_id, lang),
-    PRIMARY KEY (print_id, lang, purchase_uri)
+    FOREIGN KEY (card_name, set_id, lang) REFERENCES print_lang (card_name, set_id, lang),
+    PRIMARY KEY (card_name, set_id, lang, purchase_uri)
 );

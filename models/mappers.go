@@ -123,6 +123,58 @@ func (fc FileCard) FileCardToSet() MtgSet {
 	return set
 }
 
+func (fc FileCard) FileCardToPrint() Prints {
+	print := Prints{
+		MultiverseIds:     fc.MultiverseIds,
+		MtgoId:            fc.MtgoId,
+		MtgoFoilId:        fc.MtgoId,
+		ArenaId:           fc.ArenaId,
+		ScryfallUri:       fc.ScryfallUri,
+		RulingsUri:        fc.RulingsUri,
+		TcgplayerId:       fc.TcgplayerId,
+		TcgplayerEtchedId: fc.TcgplayerEtchedId,
+		ReleasedAt:        fc.ReleasedAt,
+		Games:             fc.Games,
+		AttractionLights:  fc.AttractionLights,
+		Oversized:         fc.Oversized,
+		SetId:             fc.SetId,
+		OracleText:        fc.OracleText,
+		CollectorNumber:   fc.CollectorNumber,
+		Digital:           fc.Digital,
+		Rarity:            fc.Rarity,
+		OldschoolF:        ternary_f(fc.Legalities.Oldschool),
+		CardBackId:        fc.CardBackId,
+		Artist:            fc.Artist,
+		IllustrationId:    fc.IllustrationId,
+		BorderColor:       fc.BorderColor,
+		Frame:             fc.Frame,
+		FullArt:           fc.FullArt,
+		Textless:          fc.Textless,
+		Booster:           fc.Booster,
+		StorySpotlight:    fc.StorySpotlight,
+		GathererUri:       fc.RelatedUris.Gatherer,
+		TcgArticlesUri:    fc.RelatedUris.TcgInfiniteArticles,
+		TcgDecksUri:       fc.RelatedUris.TcgInfiniteDecks,
+		EdhrecUri:         fc.RelatedUris.Edhrec,
+		TcgBuyUri:         fc.PurchaseUris.TcgPlayer,
+		CardmarketBuyUri:  fc.PurchaseUris.CardMarket,
+		CardhoarderBuyUri: fc.PurchaseUris.CardHoarder,
+		OracleId:          fc.OracleId,
+		CardName:          fc.Name,
+		PrintsSearchUri:   fc.PrintsSearchUri,
+		Related:           fc.AllParts,
+		FlavorName:        fc.FlavorName,
+		FrameEffects:      fc.FrameEffects,
+		SecurityStamp:     fc.SecurityStamp,
+		PreviewedAt:       fc.Previewed_at,
+		PreviewUri:        fc.PreviewUri,
+		PreviewSource:     fc.PreviewSource,
+		ContentWarning:    fc.ContentWarning,
+		BorderEffects:     fc.FrameEffects,
+	}
+	return print
+}
+
 func (s1 MtgSet) CompareSets(s2 MtgSet) bool {
 	// First, check if they are the same type
 	if reflect.TypeOf(s1) != reflect.TypeOf(s2) {
@@ -137,6 +189,60 @@ func (s1 MtgSet) CompareSets(s2 MtgSet) bool {
 		s1.SetUri == s2.SetUri &&
 		s1.SetSearchUri == s2.SetSearchUri &&
 		s1.ScryfallSetUri == s2.ScryfallSetUri
+}
+
+func (p1 Prints) ComparePrints(p2 Prints) bool {
+	if reflect.TypeOf(p1) != reflect.TypeOf(p2) {
+		return false
+	}
+
+	return compareIntSlices(p1.MultiverseIds, p2.MultiverseIds) &&
+		p1.MtgoId == p2.MtgoId &&
+		p1.MtgoFoilId == p2.MtgoFoilId &&
+		p1.ArenaId == p2.ArenaId &&
+		p1.ScryfallUri == p2.ScryfallUri &&
+		p1.RulingsUri == p2.RulingsUri &&
+		p1.TcgplayerId == p2.TcgplayerId &&
+		p1.TcgplayerEtchedId == p2.TcgplayerEtchedId &&
+		p1.ReleasedAt == p2.ReleasedAt &&
+		compareStringSlices(p1.Games, p2.Games) &&
+		compareIntSlices(p1.AttractionLights, p2.AttractionLights) &&
+		p1.Oversized == p2.Oversized &&
+		p1.SetId == p2.SetId &&
+		p1.OracleText == p2.OracleText &&
+		p1.CollectorNumber == p2.CollectorNumber &&
+		p1.Digital == p2.Digital &&
+		p1.Rarity == p2.Rarity &&
+		p1.OldschoolF == p2.OldschoolF &&
+		p1.CardBackId == p2.CardBackId &&
+		p1.Artist == p2.Artist &&
+		p1.IllustrationId == p2.IllustrationId &&
+		p1.BorderColor == p2.BorderColor &&
+		p1.Frame == p2.Frame &&
+		p1.FullArt == p2.FullArt &&
+		p1.Textless == p2.Textless &&
+		p1.Booster == p2.Booster &&
+		p1.StorySpotlight == p1.StorySpotlight &&
+		p1.GathererUri == p2.GathererUri &&
+		p1.TcgArticlesUri == p2.TcgArticlesUri &&
+		p1.TcgDecksUri == p2.TcgDecksUri &&
+		p1.EdhrecUri == p2.EdhrecUri &&
+		p1.TcgBuyUri == p2.TcgBuyUri &&
+		p1.CardmarketBuyUri == p2.CardmarketBuyUri &&
+		p1.CardhoarderBuyUri == p2.CardhoarderBuyUri &&
+		p1.OracleId == p2.OracleId &&
+		p1.CardName == p2.CardName &&
+		p1.PrintsSearchUri == p2.PrintsSearchUri &&
+		compareRelatedSlices(p1.Related, p2.Related) &&
+		p1.FlavorName == p2.FlavorName &&
+		compareStringSlices(p1.FrameEffects, p2.FrameEffects) &&
+		p1.SecurityStamp == p2.SecurityStamp &&
+		p1.PreviewedAt == p2.PreviewedAt &&
+		p1.PreviewUri == p2.PreviewUri &&
+		p1.PreviewSource == p2.PreviewSource &&
+		p1.ContentWarning == p2.ContentWarning &&
+		compareStringSlices(p1.BorderEffects, p2.BorderEffects)
+
 }
 
 func compareStringSlices(s1 []string, s2 []string) bool {
@@ -212,4 +318,31 @@ func compareCardFaces(c1, c2 CardFaces) bool {
 		c1.Toughness == c2.Toughness &&
 		c1.TypeLine == c2.TypeLine &&
 		c1.Watermark == c2.Watermark
+}
+
+func compareRelatedSlices(r1 []Related, r2 []Related) bool {
+	if len(r1) != len(r2) {
+		return false
+	}
+	sort.Slice(r1, func(i, j int) bool {
+		return r1[i].Id < r1[j].Id
+	})
+	sort.Slice(r2, func(i, j int) bool {
+		return r2[i].Id < r2[j].Id
+	})
+	for i := range r1 {
+		if !compareRelated(r1[i], r2[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+func compareRelated(r1, r2 Related) bool {
+	return r1.Object == r2.Object &&
+		r1.Id == r2.Id &&
+		r1.Component == r2.Component &&
+		r1.Name == r2.Name &&
+		r1.TypeLine == r2.TypeLine &&
+		r1.Uri == r2.Uri
 }

@@ -92,7 +92,7 @@ func main() {
 
 	reader := bufio.NewReader(file)
 	start := time.Now()
-	var lines, inserts, setInserts int
+	var lines, inserts, setInserts, printInserts int
 	for true {
 		var card models.FileCard = models.FileCard{}
 		line, err := reader.ReadString('\n')
@@ -169,8 +169,28 @@ func main() {
 				}
 			}
 
-			// TODO: put sets stuff here
+			existingPrint, err := database.GetPrintByCardNameAndSetId(card.Name, card.SetId, db)
 
+			if err != nil && err != database.PrintNotFound {
+				log.Fatal(err)
+			}
+
+			if err == database.PrintNotFound {
+				err = database.SavePrint(card.FileCardToPrint(), db)
+				if err != nil {
+					log.Fatal(err)
+				}
+				printInserts++
+			} else {
+				if !existingPrint.ComparePrints(card.FileCardToPrint()) {
+					fmt.Printf("\n")
+					fmt.Printf("Line: \n%s\n", line)
+					fmt.Printf("Existing: \n%+v\n", existingPrint)
+					fmt.Printf("File Card Card: \n%+v\n", card.FileCardToPrint())
+					fmt.Printf("File Card: \n%+v\n", card)
+					log.Panic("AH")
+				}
+			}
 			// end
 
 			fmt.Printf("\rLines Complete: %d | Inserts complete: %d | Sets Inserted: %d", lines, inserts, setInserts)

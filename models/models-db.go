@@ -96,7 +96,6 @@ type CardFaces struct {
 }
 
 type Prints struct {
-	PrintId           int   `json:"print_id"`
 	MultiverseIds     []int `json:"multiverse_ids"`
 	MtgoId            int   `json:"mtgo_id"`
 	MtgoFoilId        int   `json:"mtgo_foil_id"`
@@ -115,7 +114,7 @@ type Prints struct {
 	Digital           bool   `json:"digital"`
 	Rarity            string `json:"rarity"`
 	OldschoolF        bool
-	Card_backId       string `json:"card_back_id"`
+	CardBackId        string `json:"card_back_id"`
 	Artist            string `json:"artist"`
 	IllustrationId    string `json:"illustration_id"`
 	BorderColor       string `json:"border_color"`
@@ -131,16 +130,18 @@ type Prints struct {
 	TcgBuyUri         string
 	CardmarketBuyUri  string
 	CardhoarderBuyUri string
+	OracleId          string
 	CardName          string    `json:"name"`
 	PrintsSearchUri   string    `json:"prints_search_uri"`
-	AllParts          []Related `json:"all_parts"`
+	Related           []Related `json:"related"`
 	FlavorName        string    `json:"flavor_name"`
 	FrameEffects      []string  `json:"frame_effects"`
 	SecurityStamp     string    `json:"security_stamp"`
-	Previewed_at      string    `json:"preview.previewed_at"`
+	PreviewedAt       string    `json:"preview.previewed_at"`
 	PreviewUri        string    `json:"preview.source_uri"`
 	PreviewSource     string    `json:"preview.source"`
 	ContentWarning    bool      `json:"content_warning"`
+	BorderEffects     []string  `json:"border_effects"`
 }
 
 type PrintLangs struct {

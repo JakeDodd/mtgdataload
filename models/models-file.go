@@ -134,6 +134,7 @@ type Prices struct {
 }
 
 type RelatedUris struct {
+	Gatherer            string `json:"gatherer"`
 	TcgInfiniteArticles string `json:"tcgplayer_infinite_articles"`
 	TcgInfiniteDecks    string `json:"tcgplayer_infinite_decks"`
 	Edhrec              string `json:"edhrec"`
