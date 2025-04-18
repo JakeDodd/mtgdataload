@@ -133,14 +133,15 @@ func main() {
 					if err != nil {
 						log.Fatal(err)
 					}
+				
 					inserts++
 				} else {
 					if !existing.CompareCards(card.FileCardToCard()) {
 						fmt.Printf("\n")
 						fmt.Printf("Line: \n%s\n", line)
 						fmt.Printf("Existing: \n%+v\n", existing)
-						fmt.Printf("File Card Card: \n%+v\n", card.FileCardToCard())
-						fmt.Printf("File Card: \n%+v\n", card)
+						fmt.Printf("new: \n%+v\n", card.FileCardToCard())
+					    fmt.Printf("File Card: \n%+v\n", card)
 						log.Panic("AH")
 					}
 				}
@@ -168,27 +169,32 @@ func main() {
 					log.Panic("AH")
 				}
 			}
+			if card.Layout != "token" && card.Layout != "art_series" && card.Layout != "double_faced_token" && card.SetType != "memorabilia"{
+				existingPrint, err := database.GetPrintByCardNameAndSetId(card.Name, card.SetId, db)
 
-			existingPrint, err := database.GetPrintByCardNameAndSetId(card.Name, card.SetId, db)
-
-			if err != nil && err != database.PrintNotFound {
-				log.Fatal(err)
-			}
-
-			if err == database.PrintNotFound {
-				err = database.SavePrint(card.FileCardToPrint(), db)
-				if err != nil {
+				if err != nil && err != database.PrintNotFound {
 					log.Fatal(err)
 				}
-				printInserts++
-			} else {
-				if !existingPrint.ComparePrints(card.FileCardToPrint()) {
-					fmt.Printf("\n")
-					fmt.Printf("Line: \n%s\n", line)
-					fmt.Printf("Existing: \n%+v\n", existingPrint)
-					fmt.Printf("File Card Card: \n%+v\n", card.FileCardToPrint())
-					fmt.Printf("File Card: \n%+v\n", card)
-					log.Panic("AH")
+
+				if err == database.PrintNotFound {
+					err = database.SavePrint(card.FileCardToPrint(), db)
+					if err != nil {
+						fmt.Printf("Line: \n%s\n", line)
+						fmt.Printf("Existing: \n%+v\n", existingPrint)
+						fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
+						fmt.Printf("File Card: \n%+v\n", card)
+						log.Fatal(err)
+					}
+					printInserts++
+				} else {
+					if !existingPrint.ComparePrints(card.FileCardToPrint()) {
+						fmt.Printf("\n")
+						fmt.Printf("Line: \n%s\n", line)
+						fmt.Printf("Existing: \n%+v\n", existingPrint)
+						fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
+						fmt.Printf("File Card: \n%+v\n", card)
+						log.Panic("AH")
+					}
 				}
 			}
 			// end

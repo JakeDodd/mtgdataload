@@ -23,7 +23,7 @@ func GetPrintByCardNameAndSetId(card_name string, set_id string, db *sql.DB) (mo
 
 	row := db.QueryRow("SELECT * FROM prints WHERE card_name = $1 and set_id = $2", card_name, set_id)
 
-	err := row.Scan(&print.MtgoId, &print.MtgoFoilId, &print.ArenaId, &print.ArenaId, &print.ScryfallUri, &print.RulingsUri, &print.TcgplayerId,
+	err := row.Scan(&print.MtgoId, &print.MtgoFoilId, &print.ArenaId, &print.ScryfallUri, &print.RulingsUri, &print.TcgplayerId,
 		&print.TcgplayerEtchedId, &print.ReleasedAt, &print.Oversized, &print.SetId, &print.OracleText, &print.CollectorNumber, &print.Digital, &print.OldschoolF,
 		&print.Rarity, &print.CardBackId, &print.Artist, &print.IllustrationId, &print.BorderColor, &print.Frame, &print.FullArt, &print.Textless, &print.Booster,
 		&print.StorySpotlight, &print.GathererUri, &print.TcgArticlesUri, &print.TcgDecksUri, &print.EdhrecUri, &print.TcgBuyUri, &print.CardmarketBuyUri, &print.CardhoarderBuyUri,
@@ -79,7 +79,7 @@ func GetPrintByCardNameAndSetId(card_name string, set_id string, db *sql.DB) (mo
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT game FROM print_games WHERE card_name = $1 and set_id = $2", card_name, set_id)
+	rows, err = db.Query("SELECT game FROM print_game WHERE card_name = $1 and set_id = $2", card_name, set_id)
 	var games []string
 
 	if err == nil {
@@ -121,7 +121,7 @@ func GetPrintByCardNameAndSetId(card_name string, set_id string, db *sql.DB) (mo
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT related_id FROM print_related WHERE print_card_name = $1 and print_set_id = $2", card_name, set_id)
+	rows, err = db.Query("SELECT related_id FROM print_related WHERE print_card_name = $1 and set_id = $2", card_name, set_id)
 
 	var related_cards []models.Related
 
@@ -137,7 +137,7 @@ func GetPrintByCardNameAndSetId(card_name string, set_id string, db *sql.DB) (mo
 			}
 			var related models.Related
 
-			related_row := db.QueryRow("SELECT * FROM related WHERE card_name = $1", related_id)
+			related_row := db.QueryRow("SELECT * FROM related WHERE id = $1", related_id)
 			err = related_row.Scan(&related.Object, &related.Id, &related.Component, &related.Name, &related.TypeLine, &related.Uri)
 
 			if err != nil {
@@ -189,7 +189,6 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 		}
 		row.Close()
 	}
-
 	for i := 0; i < len(print.Games); i++ {
 		row, err = db.Query("INSERT INTO print_game (card_name, set_id, game) VALUES ($1, $2, $3)", print.CardName, print.SetId, print.Games[i])
 		if err != nil {
