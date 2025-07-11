@@ -133,7 +133,7 @@ func main() {
 					if err != nil {
 						log.Fatal(err)
 					}
-				
+
 					inserts++
 				} else {
 					if !existing.CompareCards(card.FileCardToCard()) {
@@ -141,8 +141,8 @@ func main() {
 						fmt.Printf("Line: \n%s\n", line)
 						fmt.Printf("Existing: \n%+v\n", existing)
 						fmt.Printf("new: \n%+v\n", card.FileCardToCard())
-					    fmt.Printf("File Card: \n%+v\n", card)
-						log.Panic("AH")
+						fmt.Printf("File Card: \n%+v\n", card)
+						log.Panic("Two Cards found with differeing details.")
 					}
 				}
 			}
@@ -166,10 +166,10 @@ func main() {
 					fmt.Printf("Existing: \n%+v\n", existingSet)
 					fmt.Printf("File Card Card: \n%+v\n", card.FileCardToSet())
 					fmt.Printf("File Card: \n%+v\n", card)
-					log.Panic("AH")
+					log.Panic("Two sets found with differing details.")
 				}
 			}
-			if card.Layout != "token" && card.Layout != "art_series" && card.Layout != "double_faced_token" && card.SetType != "memorabilia"{
+			if card.Layout != "token" && card.Layout != "art_series" && card.Layout != "double_faced_token" && card.SetType != "memorabilia" {
 				existingPrint, err := database.GetPrintByCardNameAndSetId(card.Name, card.SetId, db)
 
 				if err != nil && err != database.PrintNotFound {
@@ -193,7 +193,7 @@ func main() {
 						fmt.Printf("Existing: \n%+v\n", existingPrint)
 						fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
 						fmt.Printf("File Card: \n%+v\n", card)
-						log.Panic("AH")
+						log.Panic("Two Prints found with differing details.")
 					}
 				}
 			}

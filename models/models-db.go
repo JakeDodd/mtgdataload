@@ -96,12 +96,9 @@ type CardFaces struct {
 }
 
 type Prints struct {
-	MultiverseIds     []int `json:"multiverse_ids"`
-	MtgoId            int   `json:"mtgo_id"`
-	MtgoFoilId        int   `json:"mtgo_foil_id"`
-	ArenaId           int   `json:"arena_id"`
-	ScryfallUri       string
-	RulingsUri        string   `json:"rulings_uri"`
+	MtgoId            int      `json:"mtgo_id"`
+	MtgoFoilId        int      `json:"mtgo_foil_id"`
+	ArenaId           int      `json:"arena_id"`
 	TcgplayerId       int      `json:"tcgplayer_id"`
 	TcgplayerEtchedId int      `json:"tcgplayer_etched_id"`
 	ReleasedAt        string   `json:"released_at"`
@@ -123,7 +120,6 @@ type Prints struct {
 	Textless          bool   `json:"textless"`
 	Booster           bool   `json:"booster"`
 	StorySpotlight    bool   `json:"story_spotlight"`
-	GathererUri       string
 	TcgArticlesUri    string
 	TcgDecksUri       string
 	EdhrecUri         string
@@ -145,8 +141,12 @@ type Prints struct {
 }
 
 type PrintLangs struct {
-	Lang            string   `json:"lang"`
-	ScryfallUriJson string   `json:"scryfall_uri"`
+	Lang            string `json:"lang"`
+	MultiverseIds   []int  `json:"multiverse_ids"`
+	ScryfallUriJson string `json:"scryfall_uri"`
+	GathererUri     string
+	ScryfallUri     string
+	RulingsUri      string   `json:"rulings_uri"`
 	HighresImage    bool     `json:"highres_image"`
 	ImageStatus     string   `json:"image_status"`
 	Foil            bool     `json:"foil"`

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS lang_finish, lang_promo, lang_purchase_uri, print_lang, print_related, print_border_effect, print_game, print_multiverse_id,  prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, print_attraction_light, card_faces_color, card_faces_color_indicator, print_lang_card_faces, card_faces, cards, mtg_set, related CASCADE;
+DROP TABLE IF EXISTS lang_multiverse_id, lang_finish, lang_promo, lang_purchase_uri, print_lang, print_related, print_border_effect, print_frame_effect, print_game, prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, print_attraction_light, card_faces_color, card_faces_color_indicator, print_lang_card_faces, card_faces, cards, mtg_set, related CASCADE;
 
 CREATE TABLE related (
     object_parts text,
@@ -152,8 +152,6 @@ CREATE TABLE prints (
     mtgo_id integer, 
     mtgo_foil_id integer,
     arena_id integer,
-    scryfall_uri text not null,
-    rulings_uri text,
     tcgplayer_id integer,
     tcgplayer_etched_id integer,
     released_at text not null,
@@ -173,7 +171,6 @@ CREATE TABLE prints (
     textless boolean not null,
     booster boolean not null,
     story_spotlight boolean not null,
-    gatherer_uri text,
     tcg_articles_uri text,
     tcg_decks_uri text,
     edhrec_uri text,
@@ -202,13 +199,6 @@ CREATE TABLE print_attraction_light (
     PRIMARY KEY (attraction_light, card_name, set_id)
 );
 
-CREATE TABLE print_multiverse_id (
-    card_name text, 
-    set_id text,
-    multiverse_id integer,
-    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
-    PRIMARY KEY (card_name, set_id, multiverse_id)
-);
 
 CREATE TABLE print_game (
     card_name text, 
@@ -225,6 +215,14 @@ CREATE TABLE print_border_effect (
     FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
     PRIMARY KEY (card_name, set_id, border_effect)
 );
+
+CREATE TABLE print_frame_effect (
+    card_name text, 
+    set_id text,
+    frame_effect text,
+    FOREIGN KEY (card_name, set_id) REFERENCES prints(card_name, set_id),
+    PRIMARY KEY (card_name, set_id, frame_effect)
+);
     
 CREATE TABLE print_related (
     print_card_name text, 
@@ -237,6 +235,9 @@ CREATE TABLE print_related (
 CREATE TABLE print_lang (
     lang text not null,
     scryfall_uri_json text not null,
+    scryfall_uri text not null,
+    rulings_uri text,
+    gatherer_uri text,
     highres_image boolean not null,
     image_status text not null,
     foil boolean not null,
@@ -307,4 +308,13 @@ CREATE TABLE lang_purchase_uri (
 
     FOREIGN KEY (card_name, set_id, lang) REFERENCES print_lang (card_name, set_id, lang),
     PRIMARY KEY (card_name, set_id, lang, purchase_uri)
+);
+
+CREATE TABLE lang_multiverse_id (
+    card_name text, 
+    set_id text,
+    lang text,
+    multiverse_id integer,
+    FOREIGN KEY (card_name, set_id, lang) REFERENCES print_lang(card_name, set_id, lang),
+    PRIMARY KEY (card_name, set_id, lang, multiverse_id)
 );

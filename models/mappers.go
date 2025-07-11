@@ -125,12 +125,9 @@ func (fc FileCard) FileCardToSet() MtgSet {
 
 func (fc FileCard) FileCardToPrint() Prints {
 	print := Prints{
-		MultiverseIds:     fc.MultiverseIds,
 		MtgoId:            fc.MtgoId,
 		MtgoFoilId:        fc.MtgoId,
 		ArenaId:           fc.ArenaId,
-		ScryfallUri:       fc.ScryfallUri,
-		RulingsUri:        fc.RulingsUri,
 		TcgplayerId:       fc.TcgplayerId,
 		TcgplayerEtchedId: fc.TcgplayerEtchedId,
 		ReleasedAt:        fc.ReleasedAt,
@@ -152,7 +149,6 @@ func (fc FileCard) FileCardToPrint() Prints {
 		Textless:          fc.Textless,
 		Booster:           fc.Booster,
 		StorySpotlight:    fc.StorySpotlight,
-		GathererUri:       fc.RelatedUris.Gatherer,
 		TcgArticlesUri:    fc.RelatedUris.TcgInfiniteArticles,
 		TcgDecksUri:       fc.RelatedUris.TcgInfiniteDecks,
 		EdhrecUri:         fc.RelatedUris.Edhrec,
@@ -196,12 +192,9 @@ func (p1 Prints) ComparePrints(p2 Prints) bool {
 		return false
 	}
 
-	return compareIntSlices(p1.MultiverseIds, p2.MultiverseIds) &&
-		p1.MtgoId == p2.MtgoId &&
+	return p1.MtgoId == p2.MtgoId &&
 		p1.MtgoFoilId == p2.MtgoFoilId &&
 		p1.ArenaId == p2.ArenaId &&
-		p1.ScryfallUri == p2.ScryfallUri &&
-		p1.RulingsUri == p2.RulingsUri &&
 		p1.TcgplayerId == p2.TcgplayerId &&
 		p1.TcgplayerEtchedId == p2.TcgplayerEtchedId &&
 		p1.ReleasedAt == p2.ReleasedAt &&
@@ -223,7 +216,6 @@ func (p1 Prints) ComparePrints(p2 Prints) bool {
 		p1.Textless == p2.Textless &&
 		p1.Booster == p2.Booster &&
 		p1.StorySpotlight == p1.StorySpotlight &&
-		p1.GathererUri == p2.GathererUri &&
 		p1.TcgArticlesUri == p2.TcgArticlesUri &&
 		p1.TcgDecksUri == p2.TcgDecksUri &&
 		p1.EdhrecUri == p2.EdhrecUri &&
