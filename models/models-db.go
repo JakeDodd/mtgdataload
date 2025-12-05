@@ -1,5 +1,7 @@
 package models
 
+import "net/textproto"
+
 type MtgSet struct {
 	SetId          string `json:"set_id"`
 	SetCode        string `json:"set_code"`
@@ -96,6 +98,10 @@ type CardFaces struct {
 }
 
 type Prints struct {
+	CardName          string `json:"name"`
+	SetId             string `json:"set_id"`
+	Lang              string `json:"lang"`
+	OracleId          string
 	MtgoId            int      `json:"mtgo_id"`
 	MtgoFoilId        int      `json:"mtgo_foil_id"`
 	ArenaId           int      `json:"arena_id"`
@@ -105,7 +111,6 @@ type Prints struct {
 	Games             []string `json:"games"`
 	AttractionLights  []int
 	Oversized         bool   `json:"oversized"`
-	SetId             string `json:"set_id"`
 	OracleText        string `json:"oracle_text"`
 	CollectorNumber   string `json:"collector_number"`
 	Digital           bool   `json:"digital"`
@@ -126,8 +131,6 @@ type Prints struct {
 	TcgBuyUri         string
 	CardmarketBuyUri  string
 	CardhoarderBuyUri string
-	OracleId          string
-	CardName          string    `json:"name"`
 	PrintsSearchUri   string    `json:"prints_search_uri"`
 	Related           []Related `json:"related"`
 	FlavorName        string    `json:"flavor_name"`
@@ -138,38 +141,38 @@ type Prints struct {
 	PreviewSource     string    `json:"preview.source"`
 	ContentWarning    bool      `json:"content_warning"`
 	BorderEffects     []string  `json:"border_effects"`
-}
-
-type PrintLangs struct {
-	Lang            string `json:"lang"`
-	MultiverseIds   []int  `json:"multiverse_ids"`
-	ScryfallUriJson string `json:"scryfall_uri"`
-	GathererUri     string
-	ScryfallUri     string
-	RulingsUri      string   `json:"rulings_uri"`
-	HighresImage    bool     `json:"highres_image"`
-	ImageStatus     string   `json:"image_status"`
-	Foil            bool     `json:"foil"`
-	NotFoil         bool     `json:"nonfoil"`
-	Finishes        []string `json:"finishes"`
-	Promo           bool     `json:"promo"`
-	PromoTypes      []string `json:"promo_types"`
-	Reprint         bool     `json:"reprint"`
-	Variation       bool     `json:"variation"`
-	VariationOf     string   `json:"variation_of"`
-	PriceUsd        string
-	PriceUsdFoil    string
-	PriceUsdEtched  string
-	PriceEur        string
-	PriceEurFoil    string
-	PriceTix        string
-	PrintId         int         `json:"print_id"`
-	PrintedName     string      `json:"printed_name"`
-	PrintedText     string      `json:"printed_text"`
-	PrintedTypeLine string      `json:"printed_type_line"`
-	FlavorText      string      `json:"flavor_text"`
-	CardmarketId    int         `json:"cardmarket_id"`
-	Uri             string      `json:"uri"`
-	Id              string      `json:"id"`
-	CardFaces       []CardFaces `json:"card_faces"`
+	MultiverseIds     []int     `json:"multiverse_ids"`
+	GathererUri       string
+	ScryfallUri       string
+	RulingsUri        string   `json:"rulings_uri"`
+	HighresImage      bool     `json:"highres_image"`
+	ImageStatus       string   `json:"image_status"`
+	Foil              bool     `json:"foil"`
+	NotFoil           bool     `json:"nonfoil"`
+	Finishes          []string `json:"finishes"`
+	Promo             bool     `json:"promo"`
+	PromoTypes        []string `json:"promo_types"`
+	Reprint           bool     `json:"reprint"`
+	Variation         bool     `json:"variation"`
+	VariationOf       string   `json:"variation_of"`
+	PriceUsd          string
+	PriceUsdFoil      string
+	PriceUsdEtched    string
+	PriceEur          string
+	PriceEurFoil      string
+	PriceTix          string
+	PrintedName       string      `json:"printed_name"`
+	PrintedText       string      `json:"printed_text"`
+	PrintedTypeLine   string      `json:"printed_type_line"`
+	FlavorText        string      `json:"flavor_text"`
+	CardmarketId      int         `json:"cardmarket_id"`
+	CardFaces         []CardFaces `json:"card_faces"`
+	Uri               string
+	Id                string
+	PngUri            string
+	BoarderCropUri    string
+	ArtCropUri        string
+	LargeUri          string
+	NormalUri         string
+	SmallUri          string
 }

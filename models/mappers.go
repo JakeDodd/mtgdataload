@@ -167,6 +167,41 @@ func (fc FileCard) FileCardToPrint() Prints {
 		PreviewSource:     fc.PreviewSource,
 		ContentWarning:    fc.ContentWarning,
 		BorderEffects:     fc.FrameEffects,
+		Lang:              fc.Lang,
+		MultiverseIds:     fc.MultiverseIds,
+		GathererUri:       fc.RelatedUris.Gatherer,
+		ScryfallUri:       fc.ScryfallUri,
+		RulingsUri:        fc.RulingsUri,
+		HighresImage:      fc.HighresImage,
+		ImageStatus:       fc.ImageStatus,
+		Foil:              fc.Foil,
+		NotFoil:           fc.NonFoil,
+		Finishes:          fc.Finishes,
+		Promo:             fc.Promo,
+		PromoTypes:        fc.PromoTypes,
+		Reprint:           fc.Reprint,
+		Variation:         fc.Variation,
+		VariationOf:       fc.VariationOf,
+		PriceUsd:          fc.Prices.Usd,
+		PriceUsdFoil:      fc.Prices.UsdFoil,
+		PriceUsdEtched:    fc.Prices.UsdEtched,
+		PriceEur:          fc.Prices.Eur,
+		PriceEurFoil:      fc.Prices.EurFoil,
+		PriceTix:          fc.Prices.Tix,
+		PrintedName:       fc.PrintedName,
+		PrintedText:       fc.PrintedText,
+		PrintedTypeLine:   fc.PrintedTypeLine,
+		FlavorText:        fc.FlavorText,
+		CardmarketId:      fc.CardmarketId,
+		Uri:               fc.Uri,
+		Id:                fc.Id,
+		CardFaces:         fc.CardFaces,
+		PngUri:            fc.ImageUris.Png,
+		BoarderCropUri:    fc.ImageUris.BorderCrop,
+		ArtCropUri:        fc.ImageUris.ArtCrop,
+		LargeUri:          fc.ImageUris.Large,
+		NormalUri:         fc.ImageUris.Normal,
+		SmallUri:          fc.ImageUris.Small,
 	}
 	return print
 }
@@ -216,6 +251,7 @@ func (p1 Prints) ComparePrints(p2 Prints) bool {
 		p1.Textless == p2.Textless &&
 		p1.Booster == p2.Booster &&
 		p1.StorySpotlight == p1.StorySpotlight &&
+		p1.GathererUri == p2.GathererUri &&
 		p1.TcgArticlesUri == p2.TcgArticlesUri &&
 		p1.TcgDecksUri == p2.TcgDecksUri &&
 		p1.EdhrecUri == p2.EdhrecUri &&
@@ -233,8 +269,42 @@ func (p1 Prints) ComparePrints(p2 Prints) bool {
 		p1.PreviewUri == p2.PreviewUri &&
 		p1.PreviewSource == p2.PreviewSource &&
 		p1.ContentWarning == p2.ContentWarning &&
-		compareStringSlices(p1.BorderEffects, p2.BorderEffects)
-
+		compareStringSlices(p1.BorderEffects, p2.BorderEffects) &&
+		p1.Lang == p2.Lang &&
+		compareIntSlices(p1.MultiverseIds, p2.MultiverseIds) &&
+		p1.GathererUri == p2.GathererUri &&
+		p1.ScryfallUri == p2.ScryfallUri &&
+		p1.RulingsUri == p2.RulingsUri &&
+		p1.HighresImage == p2.HighresImage &&
+		p1.ImageStatus == p2.ImageStatus &&
+		p1.Foil == p2.Foil &&
+		p1.NotFoil == p2.NotFoil &&
+		compareStringSlices(p1.Finishes, p2.Finishes) &&
+		p1.Promo == p2.Promo &&
+		compareStringSlices(p1.PromoTypes, p2.PromoTypes) &&
+		p1.Reprint == p2.Reprint &&
+		p1.Variation == p2.Variation &&
+		p1.VariationOf == p2.VariationOf &&
+		p1.PriceUsd == p2.PriceUsd &&
+		p1.PriceUsdFoil == p2.PriceUsdFoil &&
+		p1.PriceUsdEtched == p2.PriceUsdEtched &&
+		p1.PriceEur == p2.PriceEur &&
+		p1.PriceEurFoil == p2.PriceEurFoil &&
+		p1.PriceTix == p2.PriceTix &&
+		p1.PrintedName == p2.PrintedName &&
+		p1.PrintedText == p2.PrintedText &&
+		p1.PrintedTypeLine == p2.PrintedTypeLine &&
+		p1.FlavorText == p2.FlavorText &&
+		p1.CardmarketId == p2.CardmarketId &&
+		p1.Uri == p2.Uri &&
+		p1.Id == p2.Id &&
+		compareCardFacesSlices(p1.CardFaces, p2.CardFaces) &&
+		p1.PngUri == p2.PngUri &&
+		p1.BoarderCropUri == p2.BoarderCropUri &&
+		p1.ArtCropUri == p2.ArtCropUri &&
+		p1.LargeUri == p2.LargeUri &&
+		p1.NormalUri == p2.NormalUri &&
+		p1.SmallUri == p2.SmallUri
 }
 
 func compareStringSlices(s1 []string, s2 []string) bool {

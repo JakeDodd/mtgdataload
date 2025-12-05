@@ -19,17 +19,21 @@ func (e *PrintNotFoundError) Error() string {
 	return fmt.Sprintf("Error: %s", e.Message)
 }
 
-func GetPrintByCardNameAndSetId(card_name string, set_id string, db *sql.DB) (models.Prints, error) {
+func GetPrintByCardNameAndSetId(card_name string, set_id string, lang string, db *sql.DB) (models.Prints, error) {
 	var print models.Prints = models.Prints{}
 
-	row := db.QueryRow("SELECT * FROM prints WHERE card_name = $1 and set_id = $2", card_name, set_id)
+	row := db.QueryRow("SELECT * FROM prints WHERE card_name = $1 and set_id = $2 and lang = $3", card_name, set_id, lang)
 
 	err := row.Scan(&print.MtgoId, &print.MtgoFoilId, &print.ArenaId, &print.TcgplayerId,
 		&print.TcgplayerEtchedId, &print.ReleasedAt, &print.Oversized, &print.SetId, &print.OracleText, &print.CollectorNumber, &print.Digital, &print.OldschoolF,
 		&print.Rarity, &print.CardBackId, &print.Artist, &print.IllustrationId, &print.BorderColor, &print.Frame, &print.FullArt, &print.Textless, &print.Booster,
 		&print.StorySpotlight, &print.TcgArticlesUri, &print.TcgDecksUri, &print.EdhrecUri, &print.TcgBuyUri, &print.CardmarketBuyUri, &print.CardhoarderBuyUri,
 		&print.OracleId, &print.CardName, &print.PrintsSearchUri, &print.FlavorName, &print.SecurityStamp, &print.PreviewedAt, &print.PreviewUri,
-		&print.PreviewSource, &print.ContentWarning)
+		&print.PreviewSource, &print.ContentWarning, &print.Lang, &print.ScryfallUri, &print.RulingsUri, &print.RulingsUri, &print.GathererUri,
+		&print.HighresImage, &print.ImageStatus, &print.Foil, &print.NotFoil, &print.Promo, &print.Reprint, &print.Variation, &print.VariationOf,
+		&print.PriceUsd, &print.PriceUsdFoil, &print.PriceUsdEtched, &print.PriceEur, &print.PriceEurFoil, &print.PriceTix, &print.PrintedName,
+		&print.PrintedText, &print.PrintedTypeLine, &print.CardmarketId, &print.Watermark, &print.PngUri, &print.BoarderCropUri,
+		&print.ArtCropUri, &print.LargeUri, &print.NormalUri, &print.SmallUri)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
