@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	_ "fmt"
-	"log"
 
 	"github.com/JakeDodd/mtgdataload/models"
 )
@@ -285,7 +284,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	row.Close()
 
 	for i := 0; i < len(print.AttractionLights); i++ {
-		row, err = db.Query("INSERT INTO print_attraction_lights (card_name, oracle_id, set_id, attraction_light, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.AttractionLights[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_attraction_light (card_name, oracle_id, set_id, attraction_light, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.AttractionLights[i], print.Lang)
 		if err != nil {
 			return err
 		}
@@ -317,8 +316,9 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 
 	for i := 0; i < len(print.Related); i++ {
 		related_card := print.Related[i]
-		related_row := db.QueryRow("SELECT * FROM related WHERE id = $1", related_card.Id)
-		if err := related_row.Scan(); err == sql.ErrNoRows {
+		related_row := db.QueryRow("SELECT id FROM related WHERE id = $1", related_card.Id)
+		var id string
+		if err := related_row.Scan(&id); err == sql.ErrNoRows {
 			row, err = db.Query("INSERT INTO related (object_parts, id, component, card_name, type_line, uri) VALUES ($1, $2, $3, $4, $5, $6)", related_card.Object, related_card.Id, related_card.Component, related_card.Name, related_card.TypeLine, related_card.Uri)
 			if err != nil {
 				return err
@@ -329,16 +329,14 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 				return err
 			}
 			row.Close()
-		} else {
-			log.Printf("%v", err)
 		}
-
 	}
 
 	for i := 0; i < len(print.CardFaces); i++ {
 		card_faces := print.CardFaces[i]
-		card_face_row := db.QueryRow("SELECT * FROM card_faces WHERE card_name = $1", card_faces.Name)
-		if err := card_face_row.Scan(); err == sql.ErrNoRows {
+		card_face_row := db.QueryRow("SELECT card_name FROM card_faces WHERE card_name = $1", card_faces.Name)
+		var card_name string
+		if err := card_face_row.Scan(&card_name); err == sql.ErrNoRows {
 			row, err = db.Query("INSERT INTO card_faces (card_name, artist, artist_id, cmc,defense,flavor_text,illustration_id,png_uri,boarder_crop_uri,art_crop_uri,large_uri,normal_uri,small_uri,layout,loyalty,mana_cost,object_type,oracle_id,oracle_text,power,printed_name,printed_text,printed_type_line,toughness,type_line,watermark) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)",
 				card_faces.Name, card_faces.Artist, card_faces.ArtistId, card_faces.Cmc, card_faces.Defense, card_faces.FlavorText,
 				card_faces.IllustrationId, card_faces.PngUri, card_faces.BoarderCropUri, card_faces.ArtCropUri, card_faces.LargeUri, card_faces.NormalUri,
@@ -353,10 +351,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 				return err
 			}
 			row.Close()
-		} else {
-			log.Printf("%v", err)
 		}
-
 	}
 
 	for i := 0; i < len(print.Finishes); i++ {
