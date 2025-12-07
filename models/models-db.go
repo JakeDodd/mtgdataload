@@ -1,7 +1,5 @@
 package models
 
-import "net/textproto"
-
 type MtgSet struct {
 	SetId          string `json:"set_id"`
 	SetCode        string `json:"set_code"`
@@ -175,4 +173,6 @@ type Prints struct {
 	LargeUri          string
 	NormalUri         string
 	SmallUri          string
+	Watermark         string `json:"watermark"`
+	PurchaseUris      []string
 }

@@ -67,11 +67,12 @@ func main() {
 	user := os.Getenv("pg_user")
 	password := os.Getenv("pg_password")
 	dbname := os.Getenv("pg_dbname")
+	sslmode := os.Getenv("sslmode")
 	filename := os.Getenv("data_filename")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s",
-		host, port, user, password, dbname)
+		"password=%s dbname=%s sslmode=%s",
+		host, port, user, password, dbname, sslmode)
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
@@ -121,29 +122,27 @@ func main() {
 			// if card.Name == "Balloon Stand" {
 			// 	log.Print(card.AttractionLights)
 			// }
-			if card.Layout != "token" && card.Layout != "art_series" && card.Layout != "double_faced_token" && card.SetType != "memorabilia" {
-				existing, err := database.GetCardByOracleIdAndName(card.OracleId, card.Name, db)
+			existing, err := database.GetCardByOracleIdAndName(card.OracleId, card.Name, db)
 
-				if err != nil && err != database.CardNotFound {
+			if err != nil && err != database.CardNotFound {
+				log.Fatal(err)
+			}
+
+			if err == database.CardNotFound {
+				err = database.SaveCard(card.FileCardToCard(), db)
+				if err != nil {
 					log.Fatal(err)
 				}
 
-				if err == database.CardNotFound {
-					err = database.SaveCard(card.FileCardToCard(), db)
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					inserts++
-				} else {
-					if !existing.CompareCards(card.FileCardToCard()) {
-						fmt.Printf("\n")
-						fmt.Printf("Line: \n%s\n", line)
-						fmt.Printf("Existing: \n%+v\n", existing)
-						fmt.Printf("new: \n%+v\n", card.FileCardToCard())
-						fmt.Printf("File Card: \n%+v\n", card)
-						log.Panic("Two Cards found with differeing details.")
-					}
+				inserts++
+			} else {
+				if !existing.CompareCards(card.FileCardToCard()) {
+					fmt.Printf("\n")
+					fmt.Printf("Line: \n%s\n", line)
+					fmt.Printf("Existing: \n%+v\n", existing)
+					fmt.Printf("new: \n%+v\n", card.FileCardToCard())
+					fmt.Printf("File Card: \n%+v\n", card)
+					log.Panic("Two Cards found with differeing details.")
 				}
 			}
 
@@ -169,37 +168,31 @@ func main() {
 					log.Panic("Two sets found with differing details.")
 				}
 			}
-			if card.Layout != "token" && card.Layout != "art_series" && card.Layout != "double_faced_token" && card.SetType != "memorabilia" {
-				existingPrint, err := database.GetPrintByCardNameAndSetId(card.Name, card.SetId, db)
+			existingPrint, err := database.GetPrint(card.Name, card.OracleId, card.SetId, card.Lang, db)
 
-				if err != nil && err != database.PrintNotFound {
+			if err != nil && err != database.PrintNotFound {
+				log.Fatal(err)
+			}
+
+			if err == database.PrintNotFound {
+				err = database.SavePrint(card.FileCardToPrint(), db)
+				if err != nil {
 					log.Fatal(err)
 				}
-
-				if err == database.PrintNotFound {
-					err = database.SavePrint(card.FileCardToPrint(), db)
-					if err != nil {
-						fmt.Printf("Line: \n%s\n", line)
-						fmt.Printf("Existing: \n%+v\n", existingPrint)
-						fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
-						fmt.Printf("File Card: \n%+v\n", card)
-						log.Fatal(err)
-					}
-					printInserts++
-				} else {
-					if !existingPrint.ComparePrints(card.FileCardToPrint()) {
-						fmt.Printf("\n")
-						fmt.Printf("Line: \n%s\n", line)
-						fmt.Printf("Existing: \n%+v\n", existingPrint)
-						fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
-						fmt.Printf("File Card: \n%+v\n", card)
-						log.Panic("Two Prints found with differing details.")
-					}
+				printInserts++
+			} else {
+				if !existingPrint.ComparePrints(card.FileCardToPrint()) {
+					fmt.Printf("\n")
+					fmt.Printf("Line: \n%s\n", line)
+					fmt.Printf("Existing: \n%+v\n", existingPrint)
+					fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
+					fmt.Printf("File Card: \n%+v\n", card)
+					log.Panic("Two Prints found with differing details.")
 				}
 			}
 			// end
 
-			fmt.Printf("\rLines Complete: %d | Inserts complete: %d | Sets Inserted: %d", lines, inserts, setInserts)
+			fmt.Printf("\rLines Complete: %d | Prints Inserted: %d | Cards Inserted: %d | Sets Inserted: %d", lines, printInserts, inserts, setInserts)
 
 		}
 

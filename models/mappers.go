@@ -193,8 +193,6 @@ func (fc FileCard) FileCardToPrint() Prints {
 		PrintedTypeLine:   fc.PrintedTypeLine,
 		FlavorText:        fc.FlavorText,
 		CardmarketId:      fc.CardmarketId,
-		Uri:               fc.Uri,
-		Id:                fc.Id,
 		CardFaces:         fc.CardFaces,
 		PngUri:            fc.ImageUris.Png,
 		BoarderCropUri:    fc.ImageUris.BorderCrop,
