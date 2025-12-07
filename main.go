@@ -168,7 +168,7 @@ func main() {
 					log.Panic("Two sets found with differing details.")
 				}
 			}
-			existingPrint, err := database.GetPrint(card.Name, card.OracleId, card.SetId, card.Lang, db)
+			existingPrint, err := database.GetPrint(card.Name, card.OracleId, card.SetId, card.Lang, card.CollectorNumber, db)
 
 			if err != nil && err != database.PrintNotFound {
 				log.Fatal(err)

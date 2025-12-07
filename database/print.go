@@ -18,10 +18,10 @@ func (e *PrintNotFoundError) Error() string {
 	return fmt.Sprintf("Error: %s", e.Message)
 }
 
-func GetPrint(card_name string, oracle_id string, set_id string, lang string, db *sql.DB) (models.Prints, error) {
+func GetPrint(card_name string, oracle_id string, set_id string, lang string, collector_number string, db *sql.DB) (models.Prints, error) {
 	var print models.Prints = models.Prints{}
 
-	row := db.QueryRow("SELECT * FROM prints WHERE card_name = $1 and oracle_id = $2 and set_id = $3 and lang = $4", card_name, oracle_id, set_id, lang)
+	row := db.QueryRow("SELECT * FROM prints WHERE card_name = $1 and oracle_id = $2 and set_id = $3 and lang = $4 and collector_number = $5", card_name, oracle_id, set_id, lang, collector_number)
 
 	err := row.Scan(&print.CardName, &print.SetId, &print.Lang, &print.OracleId, &print.MtgoId, &print.MtgoFoilId, &print.ArenaId, &print.TcgplayerId,
 		&print.TcgplayerEtchedId, &print.ReleasedAt, &print.Oversized, &print.OracleText, &print.CollectorNumber, &print.Digital, &print.OldschoolF,
