@@ -177,6 +177,11 @@ func main() {
 			if err == database.PrintNotFound {
 				err = database.SavePrint(card.FileCardToPrint(), db)
 				if err != nil {
+					fmt.Printf("\n")
+					fmt.Printf("Line: \n%s\n", line)
+					fmt.Printf("Existing: \n%+v\n", existingPrint)
+					fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
+					fmt.Printf("File Card: \n%+v\n", card)
 					log.Fatal(err)
 				}
 				printInserts++

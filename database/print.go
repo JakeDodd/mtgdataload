@@ -38,10 +38,10 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		if err == sql.ErrNoRows {
 			return print, PrintNotFound
 		}
-		return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+		return print, fmt.Errorf("GetPrintByCardName1: %s: %v", card_name, err)
 	}
 
-	rows, err := db.Query("SELECT attraction_light FROM print_attraction_light WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err := db.Query("SELECT attraction_light FROM print_attraction_light WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 	var attraction_lights []int
 
 	if err == nil {
@@ -52,7 +52,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName2: %s: %v", card_name, err)
 			}
 			attraction_lights = append(attraction_lights, attraction_light)
 		}
@@ -62,7 +62,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT game FROM print_game WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT game FROM print_game WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 	var games []string
 
 	if err == nil {
@@ -73,7 +73,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName3: %s: %v", card_name, err)
 			}
 			games = append(games, game)
 		}
@@ -83,7 +83,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT border_effect FROM print_border_effect WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT border_effect FROM print_border_effect WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 
 	var border_effects []string
 
@@ -95,7 +95,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName4: %s: %v", card_name, err)
 			}
 			border_effects = append(border_effects, border_effect)
 		}
@@ -105,7 +105,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT frame_effect FROM print_frame_effect WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT frame_effect FROM print_frame_effect WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 	var frame_effects []string
 
 	if err == nil {
@@ -116,7 +116,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName5: %s: %v", card_name, err)
 			}
 			frame_effects = append(frame_effects, frame_effect)
 		}
@@ -126,7 +126,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT related_id FROM print_related WHERE print_card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT related_id FROM print_related WHERE print_card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 
 	var related_cards []models.Related
 
@@ -160,7 +160,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		}
 	}
 
-	rows, err = db.Query("SELECT finish FROM print_finish WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT finish FROM print_finish WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 	var finishs []string
 
 	if err == nil {
@@ -171,7 +171,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName6: %s: %v", card_name, err)
 			}
 			finishs = append(finishs, finish)
 		}
@@ -181,7 +181,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT promo FROM print_promo WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT promo FROM print_promo WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 	var promos []string
 
 	if err == nil {
@@ -192,7 +192,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName7: %s: %v", card_name, err)
 			}
 			promos = append(promos, promo)
 		}
@@ -202,7 +202,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT multiverse_id FROM print_multiverse_id WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT multiverse_id FROM print_multiverse_id WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 	var multiverse_ids []int
 
 	if err == nil {
@@ -213,7 +213,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 				if err == sql.ErrNoRows {
 					break
 				}
-				return print, fmt.Errorf("GetPrintByCardName: %s: %v", card_name, err)
+				return print, fmt.Errorf("GetPrintByCardName8: %s: %v", card_name, err)
 			}
 			multiverse_ids = append(multiverse_ids, multiverse_id)
 		}
@@ -223,7 +223,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		rows.Close()
 	}
 
-	rows, err = db.Query("SELECT card_faces_card_name FROM print_card_faces WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4", card_name, set_id, oracle_id, lang)
+	rows, err = db.Query("SELECT card_faces_card_name FROM print_card_faces WHERE card_name = $1 and set_id = $2 and oracle_id = $3 and lang = $4 and collector_number = $5", card_name, set_id, oracle_id, lang, collector_number)
 
 	var cardFaces []models.CardFaces
 
@@ -284,14 +284,14 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	row.Close()
 
 	for i := 0; i < len(print.AttractionLights); i++ {
-		row, err = db.Query("INSERT INTO print_attraction_light (card_name, oracle_id, set_id, attraction_light, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.AttractionLights[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_attraction_light (card_name, oracle_id, set_id, attraction_light, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, print.AttractionLights[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}
 		row.Close()
 	}
 	for i := 0; i < len(print.Games); i++ {
-		row, err = db.Query("INSERT INTO print_game (card_name, oracle_id, set_id, game, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.Games[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_game (card_name, oracle_id, set_id, game, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, print.Games[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}
@@ -299,7 +299,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	}
 
 	for i := 0; i < len(print.BorderEffects); i++ {
-		row, err = db.Query("INSERT INTO print_border_effect (card_name, oracle_id, set_id, border_effect, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.BorderEffects[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_border_effect (card_name, oracle_id, set_id, border_effect, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, print.BorderEffects[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}
@@ -307,7 +307,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	}
 
 	for i := 0; i < len(print.FrameEffects); i++ {
-		row, err = db.Query("INSERT INTO print_frame_effect (card_name, oracle_id, set_id, frame_effect, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.FrameEffects[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_frame_effect (card_name, oracle_id, set_id, frame_effect, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, print.FrameEffects[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}
@@ -324,7 +324,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 				return err
 			}
 			row.Close()
-			row, err = db.Query("INSERT INTO print_related (print_card_name, oracle_id, set_id, related_id, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, related_card.Id, print.Lang)
+			row, err = db.Query("INSERT INTO print_related (print_card_name, oracle_id, set_id, related_id, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, related_card.Id, print.Lang, print.CollectorNumber)
 			if err != nil {
 				return err
 			}
@@ -346,7 +346,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 				return err
 			}
 			row.Close()
-			row, err = db.Query("INSERT INTO print_card_faces (lang, card_name, oracle_id, set_id, card_faces_card_name) VALUES ($1, $2, $3, $4, $5)", print.Lang, print.CardName, print.OracleId, print.SetId, card_faces.Name)
+			row, err = db.Query("INSERT INTO print_card_faces (lang, card_name, oracle_id, set_id, card_faces_card_name, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.Lang, print.CardName, print.OracleId, print.SetId, card_faces.Name, print.CollectorNumber)
 			if err != nil {
 				return err
 			}
@@ -355,7 +355,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	}
 
 	for i := 0; i < len(print.Finishes); i++ {
-		row, err = db.Query("INSERT INTO print_finish (card_name, oracle_id, set_id, finish, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.Finishes[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_finish (card_name, oracle_id, set_id, finish, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, print.Finishes[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}
@@ -363,7 +363,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	}
 
 	for i := 0; i < len(print.PromoTypes); i++ {
-		row, err = db.Query("INSERT INTO print_promo (card_name, oracle_id, set_id, promo, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.PromoTypes[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_promo (card_name, oracle_id, set_id, promo, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6)", print.CardName, print.OracleId, print.SetId, print.PromoTypes[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}
@@ -371,7 +371,7 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 	}
 
 	for i := 0; i < len(print.MultiverseIds); i++ {
-		row, err = db.Query("INSERT INTO print_multiverse_id (card_name, oracle_id, set_id, multiverse_id, lang) VALUES ($1, $2, $3, $4, $5)", print.CardName, print.OracleId, print.SetId, print.MultiverseIds[i], print.Lang)
+		row, err = db.Query("INSERT INTO print_multiverse_id (card_name, oracle_id, set_id, multiverse_id, lang, collector_number) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (card_name, oracle_id, set_id, multiverse_id, lang, collector_number) DO NOTHING", print.CardName, print.OracleId, print.SetId, print.MultiverseIds[i], print.Lang, print.CollectorNumber)
 		if err != nil {
 			return err
 		}

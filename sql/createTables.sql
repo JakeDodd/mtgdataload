@@ -217,7 +217,7 @@ CREATE TABLE prints (
     normal_uri text,
     small_uri text,
     FOREIGN KEY(card_name, oracle_id) REFERENCES cards(card_name, oracle_id),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang) --card_name, set_id, booster
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, collector_number) --card_name, set_id, booster
 );
 
 CREATE TABLE print_attraction_light (
@@ -226,8 +226,9 @@ CREATE TABLE print_attraction_light (
     set_id text,
     attraction_light integer,
     lang text,
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints(card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (attraction_light, card_name, set_id, lang)
+    collector_number text,
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints(card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (attraction_light, card_name, set_id, lang, collector_number)
 );
 
 
@@ -237,8 +238,9 @@ CREATE TABLE print_game (
     set_id text,
     game text,
     lang text,
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints(card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, game)
+    collector_number text,
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints(card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, game, collector_number)
 );
 
 CREATE TABLE print_border_effect (
@@ -247,8 +249,9 @@ CREATE TABLE print_border_effect (
     set_id text,
     border_effect text,
     lang text,
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints(card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, border_effect)
+    collector_number text,
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints(card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, border_effect, collector_number)
 );
 
 CREATE TABLE print_frame_effect (
@@ -257,8 +260,9 @@ CREATE TABLE print_frame_effect (
     set_id text,
     frame_effect text,
     lang text,
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints(card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, frame_effect)
+    collector_number text,
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints(card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, frame_effect, collector_number)
 );
     
 CREATE TABLE print_related (
@@ -267,8 +271,9 @@ CREATE TABLE print_related (
     set_id text,
     related_id text REFERENCES related (id),
     lang text,
-    FOREIGN KEY (print_card_name, oracle_id, set_id, lang) REFERENCES prints(card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (print_card_name, oracle_id, set_id, lang, related_id)
+    collector_number text,
+    FOREIGN KEY (print_card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints(card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (print_card_name, oracle_id, set_id, lang, related_id, collector_number)
 );
 
 CREATE TABLE print_card_faces (
@@ -276,10 +281,11 @@ CREATE TABLE print_card_faces (
     card_name text,
     oracle_id text,
     set_id text,
+    collector_number text,
     card_faces_card_name text REFERENCES card_faces (card_name),
 
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints (card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (lang, card_name, oracle_id, set_id, card_faces_card_name)
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints (card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (lang, card_name, oracle_id, set_id, card_faces_card_name, collector_number)
 );
 
 CREATE TABLE print_finish (
@@ -288,9 +294,10 @@ CREATE TABLE print_finish (
     set_id text,
     lang text,
     finish text,
+    collector_number text,
 
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints (card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, finish)
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints (card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, finish, collector_number)
 );
 
 CREATE TABLE print_promo (
@@ -299,20 +306,10 @@ CREATE TABLE print_promo (
     set_id text,
     lang text,
     promo text,
+    collector_number text,
 
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints (card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, promo)
-);
-
-CREATE TABLE print_purchase_uri (
-    card_name text,
-    oracle_id text,
-    set_id text,
-    lang text,
-    purchase_uri text,
-
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints (card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, purchase_uri)
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints (card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, promo, collector_number)
 );
 
 CREATE TABLE print_multiverse_id (
@@ -321,6 +318,7 @@ CREATE TABLE print_multiverse_id (
     set_id text,
     lang text,
     multiverse_id integer,
-    FOREIGN KEY (card_name, oracle_id, set_id, lang) REFERENCES prints(card_name, oracle_id, set_id, lang),
-    PRIMARY KEY (card_name, oracle_id, set_id, lang, multiverse_id)
+    collector_number text,
+    FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints(card_name, oracle_id, set_id, lang, collector_number),
+    PRIMARY KEY (card_name, oracle_id, set_id, lang, multiverse_id, collector_number)
 );
