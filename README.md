@@ -24,7 +24,15 @@ psql -d $DATABASE -U $USER
 \i $PROJECT_DIR/sql/createTables.sql
 ```
 5. Build and run the project
-```
-go build
-./mtgdataload
-```
+    1. Linux
+    ```
+    go build
+    ./mtgdataload
+    ```
+    2. Windows
+    ```
+    go build
+    mtgdataload.exe
+    ```
+    Also, make sure that you restart after installing go and postgres. And perhaps reconsider.
+        
