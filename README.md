@@ -33,6 +33,6 @@ psql -d $DATABASE -U $USER
     ```
     go build
     mtgdataload.exe
+    # Also, make sure that you restart after installing go and postgres. Consider not using windows.
     ```
-    Also, make sure that you restart after installing go and postgres. And perhaps reconsider.
         
