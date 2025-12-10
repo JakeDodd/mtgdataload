@@ -184,6 +184,8 @@ func GetCardByOracleIdAndName(oracleId string, name string, db *sql.DB) (models.
 					return card, fmt.Errorf("GetCardByName: %s: %v", name, err)
 				}
 
+
+
 				cfs_rows, err := db.Query("SELECT color FROM card_faces_colors WHERE card_name = $1", cf_name)
 
 				var cf_colors []string
