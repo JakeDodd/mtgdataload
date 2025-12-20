@@ -31,7 +31,7 @@ func GetPrint(card_name string, oracle_id string, set_id string, lang string, co
 		&print.PreviewSource, &print.ContentWarning, &print.ScryfallUri, &print.RulingsUri, &print.GathererUri,
 		&print.HighresImage, &print.ImageStatus, &print.Foil, &print.NotFoil, &print.Promo, &print.Reprint, &print.Variation, &print.VariationOf,
 		&print.PriceUsd, &print.PriceUsdFoil, &print.PriceUsdEtched, &print.PriceEur, &print.PriceEurFoil, &print.PriceTix, &print.PrintedName,
-		&print.PrintedText, &print.PrintedTypeLine, &print.CardmarketId, &print.Watermark, &print.PngUri, &print.BoarderCropUri,
+		&print.PrintedText, &print.PrintedTypeLine, &print.FlavorText, &print.CardmarketId, &print.Watermark, &print.PngUri, &print.BoarderCropUri,
 		&print.ArtCropUri, &print.LargeUri, &print.NormalUri, &print.SmallUri)
 
 	if err != nil {
@@ -268,15 +268,15 @@ func SavePrint(print models.Prints, db *sql.DB) error {
 		"collector_number, digital, rarity, oldschool_f, card_back_id, artist, illustration_id, border_color, frame, full_art, textless, booster, story_spotlight, tcg_articles_uri,"+
 		"tcg_decks_uri, edhrec_uri, tcg_buy_uri, cardmarket_buy_uri, cardhoarder_buy_uri, oracle_id, card_name, prints_search_uri, flavor_name, security_stamp, previewed_at, previewed_source_uri,"+
 		"preview_source, content_warning, scryfall_uri, rulings_uri, gatherer_uri, highres_image, image_status, foil, not_foil, promo, reprint, variation,"+
-		"variation_of, price_usd, price_usd_foil, price_usd_etched, price_eur, price_eur_foil, price_tix, printed_name, printed_next, printed_type_line, cardmarket_id,"+
+		"variation_of, price_usd, price_usd_foil, price_usd_etched, price_eur, price_eur_foil, price_tix, printed_name, printed_next, printed_type_line, flavor_text, cardmarket_id,"+
 		"watermark, png_uri, boarder_crop_uri, art_crop_uri, large_uri, normal_uri, small_uri) "+
-		"VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64,$65,$66)",
+		"VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64,$65,$66,$67)",
 		print.Lang, print.MtgoId, print.MtgoFoilId, print.ArenaId, print.TcgplayerId, print.TcgplayerEtchedId, print.ReleasedAt, print.Oversized, print.SetId, print.OracleText,
 		print.CollectorNumber, print.Digital, print.Rarity, print.OldschoolF, print.CardBackId, print.Artist, print.IllustrationId, print.BorderColor, print.Frame, print.FullArt, print.Textless, print.Booster,
 		print.StorySpotlight, print.TcgArticlesUri, print.TcgDecksUri, print.EdhrecUri, print.TcgBuyUri, print.CardmarketBuyUri, print.CardhoarderBuyUri, print.OracleId, print.CardName,
 		print.PrintsSearchUri, print.FlavorName, print.SecurityStamp, print.PreviewedAt, print.PreviewUri, print.PreviewSource, print.ContentWarning, print.ScryfallUri, print.RulingsUri, print.GathererUri,
 		print.HighresImage, print.ImageStatus, print.Foil, print.NotFoil, print.Promo, print.Reprint, print.Variation, print.VariationOf, print.PriceUsd, print.PriceUsdFoil, print.PriceUsdEtched, print.PriceEur,
-		print.PriceEurFoil, print.PriceTix, print.PrintedName, print.PrintedText, print.PrintedTypeLine, print.CardmarketId, print.Watermark, print.PngUri, print.BoarderCropUri, print.ArtCropUri, print.LargeUri, print.NormalUri, print.SmallUri)
+		print.PriceEurFoil, print.PriceTix, print.PrintedName, print.PrintedText, print.PrintedTypeLine, print.FlavorText, print.CardmarketId, print.Watermark, print.PngUri, print.BoarderCropUri, print.ArtCropUri, print.LargeUri, print.NormalUri, print.SmallUri)
 
 	if err != nil {
 		return err

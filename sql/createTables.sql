@@ -208,6 +208,7 @@ CREATE TABLE prints (
     printed_name     text,
     printed_next     text,    
     printed_type_line text,
+    flavor_text text,
     cardmarket_id integer,
     watermark text,
     png_uri text,
