@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 
@@ -177,20 +178,29 @@ func main() {
 			if err == database.PrintNotFound {
 				err = database.SavePrint(card.FileCardToPrint(), db)
 				if err != nil {
-					fmt.Printf("\n")
-					fmt.Printf("Line: \n%s\n", line)
-					fmt.Printf("Existing: \n%+v\n", existingPrint)
-					fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
-					fmt.Printf("File Card: \n%+v\n", card)
 					log.Fatal(err)
 				}
 				printInserts++
 			} else {
 				if !existingPrint.ComparePrints(card.FileCardToPrint()) {
+					sort.Slice(existingPrint.Related, func(i, j int) bool {
+						return existingPrint.Related[i].Id < existingPrint.Related[j].Id
+					})
+					newPrint := card.FileCardToPrint()
+					sort.Slice(newPrint.Related, func(i, j int) bool {
+						return newPrint.Related[i].Id < newPrint.Related[j].Id
+					})
+					sort.Slice(existingPrint.CardFaces, func(i, j int) bool {
+						return existingPrint.CardFaces[i].Name < existingPrint.CardFaces[j].Name && existingPrint.CardFaces[i].IllustrationId < existingPrint.CardFaces[j].IllustrationId
+					})
+					sort.Slice(newPrint.CardFaces, func(i, j int) bool {
+						return newPrint.CardFaces[i].Name < newPrint.CardFaces[j].Name && newPrint.CardFaces[i].IllustrationId < newPrint.CardFaces[j].IllustrationId
+					})
+
 					fmt.Printf("\n")
 					fmt.Printf("Line: \n%s\n", line)
 					fmt.Printf("Existing: \n%+v\n", existingPrint)
-					fmt.Printf("New: \n%+v\n", card.FileCardToPrint())
+					fmt.Printf("New: \n%+v\n", newPrint)
 					fmt.Printf("File Card: \n%+v\n", card)
 					log.Panic("Two Prints found with differing details.")
 				}
