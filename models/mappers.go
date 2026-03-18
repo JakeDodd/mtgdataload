@@ -1,7 +1,9 @@
 package models
 
 import (
+	"cmp"
 	"reflect"
+	"slices"
 	"sort"
 )
 
@@ -335,15 +337,20 @@ func compareCardFacesSlices(s1 []CardFaces, s2 []CardFaces) bool {
 	if len(s1) != len(s2) {
 		return false
 	}
-	sort.Slice(s1, func(i, j int) bool {
-		return s1[i].Name < s1[j].Name
+	slices.SortFunc(s1, func(i, j CardFaces) int {
+		return cmp.Or(
+			cmp.Compare(i.Name, j.Name),
+			cmp.Compare(i.IllustrationId, j.IllustrationId),
+		)
 	})
-
-	sort.Slice(s2, func(i, j int) bool {
-		return s2[i].Name < s2[j].Name
+	slices.SortFunc(s2, func(i, j CardFaces) int {
+		return cmp.Or(
+			cmp.Compare(i.Name, j.Name),
+			cmp.Compare(i.IllustrationId, j.IllustrationId),
+		)
 	})
 	for i := range s1 {
-		if compareCardFaces(s1[i], s2[i]) {
+		if !compareCardFaces(s1[i], s2[i]) {
 			return false
 		}
 	}

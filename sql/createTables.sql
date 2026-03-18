@@ -130,21 +130,25 @@ CREATE TABLE card_faces (
     type_line       text,
     watermark      text,
 
-    PRIMARY KEY (card_name)
+    PRIMARY KEY (card_name, illustration_id)
 );
 
 CREATE TABLE card_faces_color (
-    card_name text REFERENCES card_faces (card_name),
+    card_name text,
+    illustration_id  text,
     color text,
 
-    PRIMARY KEY (card_name, color)
+    FOREIGN KEY (card_name, illustration_id) REFERENCES card_faces (card_name, illustration_id),
+    PRIMARY KEY (card_name, illustration_id, color)
 );
 
 CREATE TABLE card_faces_color_indicator (
-    card_name text REFERENCES card_faces (card_name),
+    card_name text,
+    illustration_id  text,
     color text,
 
-    PRIMARY KEY (card_name, color)
+    FOREIGN KEY (card_name, illustration_id) REFERENCES card_faces (card_name, illustration_id),
+    PRIMARY KEY (card_name, illustration_id, color)
 );
 
 
@@ -208,6 +212,7 @@ CREATE TABLE prints (
     printed_name     text,
     printed_next     text,    
     printed_type_line text,
+    flavor_text text,
     cardmarket_id integer,
     watermark text,
     png_uri text,
@@ -282,10 +287,12 @@ CREATE TABLE print_card_faces (
     oracle_id text,
     set_id text,
     collector_number text,
-    card_faces_card_name text REFERENCES card_faces (card_name),
+    card_faces_card_name text ,
+    illustration_id text,
 
+    FOREIGN KEY (card_faces_card_name, illustration_id) REFERENCES card_faces (card_name, illustration_id),
     FOREIGN KEY (card_name, oracle_id, set_id, lang, collector_number) REFERENCES prints (card_name, oracle_id, set_id, lang, collector_number),
-    PRIMARY KEY (lang, card_name, oracle_id, set_id, card_faces_card_name, collector_number)
+    PRIMARY KEY (lang, card_name, oracle_id, set_id, card_faces_card_name, collector_number, illustration_id)
 );
 
 CREATE TABLE print_finish (
