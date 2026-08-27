@@ -61,7 +61,6 @@ type Cards struct {
 	EdhrecRank       int      `json:"edhrec_rank"`
 	HandModifier     string   `json:"hand_modifier"`
 	LifeModifier     string   `json:"life_modifier"`
-	PennyRank        int      `json:"penny_rank"`
 }
 
 type CardFaces struct {

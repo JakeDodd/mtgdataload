@@ -57,7 +57,6 @@ func (fc FileCard) FileCardToCard() Cards {
 		EdhrecRank:       fc.EdhrecRank,
 		HandModifier:     fc.HandModifier,
 		LifeModifier:     fc.LifeModifier,
-		PennyRank:        fc.PennyRank,
 	}
 	return card
 }
@@ -195,7 +194,7 @@ func (fc FileCard) FileCardToPrint() Prints {
 		PrintedTypeLine:   fc.PrintedTypeLine,
 		FlavorText:        fc.FlavorText,
 		CardmarketId:      fc.CardmarketId,
-		CardFaces:         fc.CardFaces,
+		CardFaces:         FileCardFaceToCardFace(fc.CardFaces),
 		PngUri:            fc.ImageUris.Png,
 		BoarderCropUri:    fc.ImageUris.BorderCrop,
 		ArtCropUri:        fc.ImageUris.ArtCrop,
@@ -204,6 +203,43 @@ func (fc FileCard) FileCardToPrint() Prints {
 		SmallUri:          fc.ImageUris.Small,
 	}
 	return print
+}
+
+func FileCardFaceToCardFace(c []CardFacesFile) []CardFaces {
+	var card_faces []CardFaces
+	for i := 0; i < len(c); i++ {
+		var face CardFaces
+		face.Artist = c[i].Artist
+		face.ArtistId = c[i].ArtistId
+		face.Cmc = c[i].Cmc
+		face.ColorIndicator = c[i].ColorIndicator
+		face.Colors = c[i].Colors
+		face.Defense = c[i].Defense
+		face.FlavorText = c[i].FlavorText
+		face.IllustrationId = c[i].IllustrationId
+		face.PngUri = c[i].ImageUris.Png
+		face.BoarderCropUri = c[i].ImageUris.BorderCrop
+		face.ArtCropUri = c[i].ImageUris.ArtCrop
+		face.LargeUri = c[i].ImageUris.Large
+		face.NormalUri = c[i].ImageUris.Normal
+		face.SmallUri = c[i].ImageUris.Small
+		face.Layout = c[i].Layout
+		face.Loyalty = c[i].Loyalty
+		face.ManaCost = c[i].ManaCost
+		face.Name = c[i].Name
+		face.Object = c[i].Object
+		face.OracleId = c[i].OracleId
+		face.OracleText = c[i].OracleText
+		face.Power = c[i].Power
+		face.PrintedName = c[i].PrintedName
+		face.PrintedText = c[i].PrintedText
+		face.PrintedTypeLine = c[i].PrintedTypeLine
+		face.Toughness = c[i].Toughness
+		face.TypeLine = c[i].TypeLine
+		face.Watermark = c[i].Watermark
+		card_faces = append(card_faces, face)
+	}
+	return card_faces
 }
 
 func (s1 MtgSet) CompareSets(s2 MtgSet) bool {

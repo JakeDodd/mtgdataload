@@ -1,4 +1,14 @@
-DROP TABLE IF EXISTS print_multiverse_id, print_finish, print_promo, print_purchase_uri, print_related, print_border_effect, print_frame_effect, print_game, prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, print_attraction_light, card_faces_color, card_faces_color_indicator, print_card_faces, card_faces, cards, mtg_set, related CASCADE;
+DROP TABLE IF EXISTS app_user, print_multiverse_id, print_finish, print_promo, print_purchase_uri, print_related, print_border_effect, print_frame_effect, print_game, prints, card_color, card_color_identity, card_produced_mana, card_keyword, card_color_indicator, print_attraction_light, card_faces_color, card_faces_color_indicator, print_card_faces, card_faces, cards, mtg_set, related CASCADE;
+
+CREATE TABLE app_user (
+	id uuid,
+	issuer text,
+	subject text,
+	email text,
+	PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX idx_issuer_subject ON app_user (issuer, subject);
 
 CREATE TABLE related (
     object_parts text,

@@ -20,10 +20,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// TODO
-// Create struct for original json card table: FileCard
-// For each created table we need a matching struct: Card, Printcard, Langcard, etc
-// Make new Folder in dataload project called models - models.go (package models at top) - all structs go in here
 func array2String(arr []string) string {
 	var result string
 	for i := 0; i < len(arr); i++ {
